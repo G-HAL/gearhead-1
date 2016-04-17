@@ -25,6 +25,14 @@ unit texutil;
 
 interface
 
+uses sysutils, iconv;
+
+Function TextISO646_AllowableCheck( const c: Char ): Boolean;
+
+Function TextEncode( const src: String ): String;
+Function TextEncode_( const src: String ): String;
+Function TextDecode( const src: String ): String;
+
 Procedure DeleteWhiteSpace(var S: String);
 Procedure DeleteFirstChar(var S: String);
 Function ExtractWord(var S: String): String;
@@ -58,6 +66,89 @@ Function ReplaceHash( const msg, s: String ): String;
 implementation
 
 uses strings;
+
+Function TextISO646_AllowableCheck( const C: Char ): Boolean;
+	{ Check, is a character C in ISO/IEC 646 (in other words, ISO 8859-1 G0 GL page), printable and allowable by SAtt in gears.pp. }
+	{ return-code: True is OK, False is BAD. }
+begin
+	if c < #$20 then Exit( False ); { Not Printable }
+	if #$7E < c then Exit( False ); { Not ISO/IEC 646 }
+	if '<' = c then Exit( False ); { Used by *SAtt() }
+	if '>' = c then Exit( False ); { Used by *SAtt() }
+	{ if '#' = c then Exit( False ); } { Used by ReplaceHash() }
+	if '%' = c then Exit( False ); { Used by FormatChatStringByGender() }
+	{ if '\\' = c then Exit( False ); } { Used by script }
+	Exit( True );
+end;
+
+Function TextEncode( const src: String ): String;
+const
+	AllowableCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()-=_.';
+var
+	Len, P: Integer;
+begin
+	TextEncode := '';
+	Len := Length(src);
+	P := 1;
+	while (P <= Len) do begin
+		if 0 < Pos(src[P], AllowableCharacters) then begin
+			TextEncode := TextEncode + src[P];
+			Inc(P);
+		end else begin
+			TextEncode := TextEncode + '%' + IntToHex(Ord(src[P]),2);
+			Inc(P);
+		end;
+	end;
+end;
+
+Function TextEncode_( const src: String ): String;
+const
+	AllowableCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()-=_.';
+var
+	Len, P: Integer;
+begin
+	TextEncode_ := '';
+	Len := Length(src);
+	P := 1;
+	while (P <= Len) do begin
+		if 0 < Pos(src[P], AllowableCharacters) then begin
+			TextEncode_ := TextEncode_ + src[P];
+			Inc(P);
+		end else begin
+			TextEncode_ := TextEncode_ + '_';
+			Inc(P);
+		end;
+	end;
+end;
+
+Function TextDecode( const src: String ): String;
+var
+	Len, P: Integer;
+	tmp: String;
+begin
+	TextDecode := '';
+	Len := Length(src);
+	P := 1;
+	while (P <= Len) do begin
+		if '%' = src[P] then begin
+			Inc(P);
+			tmp := '';
+			if (P +1) <= Len then begin
+				tmp := '$' + src[P] + src[P+1];
+				Inc(P);
+				Inc(P);
+			end else if P <= Len then begin
+				tmp := '$' + src[P];
+				Inc(P);
+			end;
+			TextDecode := TextDecode + Chr(StrToInt(tmp));
+		end else begin
+			TextDecode := TextDecode + src[P];
+			Inc(P);
+		end;
+	end;
+end;
+
 
 Procedure DeleteWhiteSpace(var S: String);
 	{Delete any whitespace which is at the beginning of}
