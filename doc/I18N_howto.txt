@@ -1,0 +1,382 @@
+How to make your language edition.
+
+0. Notices
+
+ I18N GearHead-1 is support almost all languages,
+but it has some limitations.
+
+
+0.1. "Combining Character" and "Precomposed Character"
+
+ "Combining Character" (Devanagri, Thai, Japanese, et al.)
+are not completely supported.
+ But "Precomposed Character" are supported.
+Please use "Precomposed Character" instead of "Combining Character",
+when "Combining Character" cause something incorrects.
+
+
+0.2. "bidi RTL"
+
+ "Languages written from the right to the left (bidi RTL)"
+(Arabic, Hebrew, Near Ancient Japanese, et al.)
+are supported, but not tested enough.
+
+ "Languages written from the up to the down"
+(Mongolian, Another style of Chinese/Japanese/Korean, et al.)
+are not supported.
+
+
+0.3. Limitation of a Length
+
+ A length of one message in game is limited to under 255 bytes.
+And, a length of one line in game data is limited to under 255 bytes.
+
+
+1. Decide the Parameters
+
+ At first, you have to decide the character encoding.
+I18N GearHead-1 support many encoings.
+
+	multibyte-euc-jp
+	multibyte-euc-kr
+	multibyte-euc-cn
+	multibyte-euc-tw
+	multibyte-utf-8
+	2byte-sjis
+	2byte-cp932
+	singlebyte-ascii
+	singlebyte-iso646-us
+	singlebyte-iso8859-1
+	singlebyte-iso8859-2
+	singlebyte-iso8859-3
+	singlebyte-iso8859-4
+	singlebyte-iso8859-5
+	singlebyte-iso8859-6
+	singlebyte-iso8859-7
+	singlebyte-iso8859-8
+	singlebyte-iso8859-9
+	singlebyte-iso8859-10
+	singlebyte-iso8859-11
+	singlebyte-iso8859-13
+	singlebyte-iso8859-14
+	singlebyte-iso8859-15
+	singlebyte-iso8859-16
+	singlebyte-koi8-r
+	singlebyte-koi8-u
+	singlebyte-tis620
+	And other single-byte encodings.
+
+ ISO2022-* is not supported.
+ UTF-16 and ucs-2 are not supported.
+
+ When you decide to use multibyte-utf-8,
+UTF-8 sometimes need two, three or four bytes per one character.
+And by limitation of 255 bytes,
+you HAVE TO write one message by 128, 85 or 64 characters.
+
+ After you decided the character encoding.
+You write it to SYSTEM_ENCODING in GameData/I18N_settings.txt .
+
+ And, you write a character encoding for a Console to
+TERMINAL_ENCODING_DEFAULT in GameData/I18N_settings.txt ,
+and TERMINAL_ENCODING_DEFAULT_MSWIN in GameData/I18N_settings.txt .
+SYSTEM_ENCODING and TERMINAL_ENCODING_DEFAULT can specify the different one.
+TERMINAL_ENCODING_DEFAULT_MSWIN is used in MS-Windows,
+TERMINAL_ENCODING_DEFAULT is used in other OS.
+In some languages, TERMINAL_ENCODING_DEFAULT_MSWIN is
+different from TERMINAL_ENCODING_DEFAULT.
+
+ You can overload TERMINAL_ENCODING_DEFAULT or TERMINAL_ENCODING_DEFAULT_MSWIN
+by using environment variable GEARHEAD_LANG in runtime.
+
+ If you need bidi-RTL,
+and your console or your SDL library are not support bidi-RTL,
+please try setting TERMINAL_ENCODING_CONV_bidiRTL in GameData/I18N_settings.txt
+to True.
+
+ If your language data set contains original fonts for SDL,
+you set it to default fonts if you want.
+Default_FontFileBig
+Default_FontFaceBig
+Default_FontSizeBig
+Default_FontFileSmall
+Default_FontFaceSmall
+Default_FontSizeSmall
+MSWIN_Default_FontNameOther
+MSWIN_Default_FontWeightOther
+MSWIN_Default_FontSizeOther
+
+
+2. Translate the Messages
+
+ After that, you translate the messages.
+
+
+2.0. Local Rules
+
+ In message data, you use some macros.
+
+
+2.0.0.
+
+ The line, started by "%", are comments.
+
+
+2.0.1. "%JF"
+
+ "%JF" is "Word for First Person".
+It replaced by a word
+listed in GameData/I18N_pgt_fp_f.txt or GameData/I18N_pgt_fp_m.txt .
+
+
+2.0.2. "%JS"
+
+ "%JS" is "Word for Second Person".
+It replaced by a word
+listed in GameData/I18N_pgt_sp_f.txt or GameData/I18N_pgt_sp_m.txt .
+
+
+2.0.3. "%JG"
+
+ "%JG" is "Word for Finishing Off of Sentence"
+It replaced by a word
+listed in GameData/I18N_pgt_t_f1.txt or GameData/I18N_pgt_t_m1.txt .
+
+
+2.0.4. "%JA"
+
+ It replaced by a word
+listed in GameData/I18N_modifier.txt or GameData/adjectives.txt .
+
+
+2.0.5. "%A"
+
+ It replaced by a word listed in GameData/adjectives.txt .
+
+
+2.0.6. "%N"
+
+ It replaced by a word listed in GameData/nouns.txt .
+
+
+2.0.7. "%T"
+
+ It replaced by a word listed in GameData/threats.txt .
+
+
+
+2.1. GameData/*.txt
+
+2.1.1.
+ Files listed followed are system data, DO NOT TRANSLATE ITS.
+
+GameData/aslmacro.txt
+GameData/asvmacro.txt
+GameData/ghpmacro.txt
+GameData/randmaps.txt
+GameData/sdl_colors.txt
+
+
+2.1.2.
+ Files listed followed are general purpose message data.
+You translate the words quoted by <>.
+
+GameData/I18N_settings.txt
+GameData/I18N_name.txt
+GameData/I18N_messages.txt
+GameData/I18N_keymap_desc.txt
+GameData/I18N_keymap_name.txt
+GameData/I18N_pgt_fp_f.txt
+GameData/I18N_pgt_fp_m.txt
+GameData/I18N_pgt_sp_f.txt
+GameData/I18N_pgt_sp_m.txt
+GameData/I18N_pgt_t_f1.txt
+GameData/I18N_pgt_t_m1.txt
+GameData/ability.txt
+GameData/chat_msg.txt
+GameData/damage.txt
+GameData/effects.txt
+GameData/messages.txt
+GameData/taunts.txt
+
+
+2.1.3.
+
+ Files listed followed are general purpose message and series data.
+You translate names "NAME <translate here>",
+and message data "MSG* <translate here>".
+
+GameData/lmtactics.txt
+GameData/meta1.txt
+GameData/meta10.txt
+GameData/meta11.txt
+GameData/meta12.txt
+GameData/meta13.txt
+GameData/meta3.txt
+GameData/meta4.txt
+GameData/meta5.txt
+GameData/meta6.txt
+GameData/meta7.txt
+GameData/meta8.txt
+GameData/meta9.txt
+
+
+2.1.4.
+ Files listed followed are general purpose words lists.
+You translate the words listed in the files.
+
+GameData/TC_1_1.txt
+GameData/TC_1_2.txt
+GameData/TC_2_1.txt
+GameData/TC_2_2.txt
+GameData/TC_3_1.txt
+GameData/TC_3_2.txt
+GameData/TC_4_1.txt
+GameData/TC_4_2.txt
+GameData/TC_5_1.txt
+GameData/TC_5_2.txt
+GameData/TC_6_1.txt
+GameData/TC_6_2.txt
+GameData/TC_7_1.txt
+GameData/TC_7_2.txt
+GameData/adjectives.txt
+GameData/I18N_modifier.txt
+GameData/nouns.txt
+GameData/phrases.txt
+GameData/rumors.txt
+GameData/threats.txt
+
+
+2.2. Design/Mek_Equipment.txt and Design/PC_Equipment.txt
+
+ Design/Mek_Equipment.txt and Design/PC_Equipment.txt are parts data.
+You translate parts names "NAME <translate here>",
+and descriptions "DESC <translate here>".
+
+Example.
+---- Before Translate  ----------------------------------------
+Melee 2
+Name <Knife>
+Type <THROWN>
+desc <A simple knife.>
+Acc 1
+Speed 5
+---------------------------------------------------------------
+
+---- After Translate  -----------------------------------------
+Melee 2
+Name <Knife>
+Name <Translated Name for Knife>
+Type <THROWN>
+% desc <A simple knife.>
+desc <Translated Description for Knife>
+Acc 1
+Speed 5
+---------------------------------------------------------------
+
+ The first "NAME <Knife>" is the name before translate,
+second "NAME <Translated Name for Knife>" is the name after translated.
+You write two "NAME <...>" before and after translate.
+
+ "Desc <...>" is wrote only one time, after translated.
+
+
+
+2.3. Design/*.txt
+
+ Design/*.txt are mecha data.
+You translate descriptions "DESC <translate here>",
+and parts names "NAME <translate here>".
+ In the English Edition, parts names are sometimes omitted.
+
+Example.
+---- Before Translate  ----------------------------------------
+Battroid 3
+Name <Alba>
+Desig <GWR-17>
+Desc <Commando mecha used by Terran Defense Force. ...>
+
+Mod Head
+        Size 2
+        Armor 2
+        sub
+                Sensor 10
+                TarComp 2
+        end
+---------------------------------------------------------------
+
+---- After Translate  -----------------------------------------
+Battroid 3
+Name <Alba>
+Desig <GWR-17>
+% Desc <Commando mecha used by Terran Defense Force. ...>
+desc <Translated Description for Alba>
+
+Mod Head
+        Name <Translated Name for Head>
+        Size 2
+        Armor 2
+        sub
+                Sensor 10
+                Name <Translated Name for C10-Sensor>
+                TarComp 2
+                Name <Translated Name for C2-TargettingComputer>
+        end
+---------------------------------------------------------------
+
+
+
+2.5. Series/WMONdefault.txt
+
+ Series/WMONdefault.txt is monster data and macros for monsters.
+You translate names "NAME <translate here>",
+message data "MSG* <translate here>",
+and chat data "CHAT_* <translate here>".
+ DO NOT translate the tags "ARCH (NAME)".
+
+Example.
+---- Before Translate  ----------------------------------------
+ARCH Rat
+roguechar <r>
+---- (snip) ---------------------------------------------------
+Msg1 <You cut up the rat and save some nice steaks for later.>
+---- (snip) ---------------------------------------------------
+mod head
+        sub
+                gear 4 0 2
+                NAME <Fangs>
+                stat 3 1
+        end
+---------------------------------------------------------------
+
+---- After Translate  -----------------------------------------
+ARCH Rat
+        NAME <Translated Name for Rat>
+roguechar <r>
+---- (snip) ---------------------------------------------------
+% Msg1 <You cut up the rat and save some nice steaks for later.>
+Msg1 <Translated Message>
+---- (snip) ---------------------------------------------------
+mod head
+        NAME <Translated Name for Head>
+        sub
+                gear 4 0 2
+                NAME <Fangs>
+                NAME <Translated Name for Fangs>
+                stat 3 1
+        end
+---------------------------------------------------------------
+
+
+2.4. Series/*.txt
+
+ Series/*.txt are message and scenario data.
+You translate names "NAME <translate here>",
+message data "MSG* <translate here>",
+chat prompt "PROMPT* <translate here>",
+chat data "CHAT_* <translate here>",
+and rumor messages "RUMOR <translate here>".
+
+
+
+[ End of File ]
