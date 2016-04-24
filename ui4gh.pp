@@ -32,6 +32,13 @@ type
 		KCode: Char;
 	end;
 
+	FontSearchNameDesc = Record
+		FontFile: String;
+		FontFace: Integer;
+		FontSize: Integer;
+	end;
+	PFontSearchNameDesc = ^FontSearchNameDesc;
+
 const
 	RPK_UpRight = '9';
 	RPK_Up = '8';
@@ -334,6 +341,227 @@ const
 	KMC_SwitchTarget = 44;
 	KMC_RunToggle = 45;
 
+{$IF DEFINED(UNIX)}
+	MaxFontSearchDirNum = 7;
+	FontSearchDir: Array [1..MaxFontSearchDirNum] of String = (
+		'',					{ Read from gharena.cfg }
+		'Image',				{ default directory }
+		'',					{ current directory }
+  {$IF DEFINED(FONTFILE_USR_X11R6)}
+		'/usr/X11R6/lib/X11/fonts/TrueType',	{ FreeBSD 6.2 and before, some Distribution of GNU/Linux }
+  {$ELSEIF DEFINED(FONTFILE_USR_LOCAL)}
+		'/usr/local/lib/X11/fonts/TrueType',	{ FreeBSD 6.3 and later }
+  {$ELSEIF DEFINED(FONTFILE_USR_SHARE)}
+		'/usr/share/fonts/truetype/sazanami',	{ Debian GNU/Linux }
+  {$ELSE}
+		'',
+  {$ENDIF}
+		'/usr/X11R6/lib/X11/fonts/TrueType',	{ FreeBSD 6.2 and before, some Distribution of GNU/Linux }
+		'/usr/local/lib/X11/fonts/TrueType',	{ FreeBSD 6.3 and later }
+		'/usr/share/fonts/truetype/sazanami'	{ Debian GNU/Linux }
+	);
+	MaxFontSearchNameNum = 11;
+	FontSearchName_Big: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 1 }
+			FontFile: 'sazanami-gothic.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 2 }
+			FontFile: 'sazanami-mincho.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 3 }
+			FontFile: 'ipag.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 4 }
+			FontFile: 'ipam.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 5 }
+			FontFile: 'kochi-gothic-subst.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 6 }
+			FontFile: 'kochi-mincho-subst.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 7 }
+			FontFile: 'kochi-gothic.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 8 }
+			FontFile: 'kochi-mincho.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Default font }
+			FontFile: 'VeraBd.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		)
+	);
+	FontSearchName_Small: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 11;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 11;
+		), (	{ Normal Font, 1 }
+			FontFile: 'sazanami-gothic.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 2 }
+			FontFile: 'sazanami-mincho.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 3 }
+			FontFile: 'ipag.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 4 }
+			FontFile: 'ipam.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 5 }
+			FontFile: 'kochi-gothic-subst.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 6 }
+			FontFile: 'kochi-mincho-subst.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 7 }
+			FontFile: 'kochi-gothic.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Normal Font, 8 }
+			FontFile: 'kochi-mincho.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Default font }
+			FontFile: 'VeraMoBd.ttf';
+			FontFace: 0;
+			FontSize: 11;
+		)
+	);
+{$ELSEIF DEFINED(WINDOWS)}
+	MaxFontSearchDirNum = 6;
+	FontSearchDir: Array [1..MaxFontSearchDirNum] of String = (
+		'',			{ Read from gharena.cfg }
+		'Image',		{ default directory }
+		'',			{ current directory }
+		'',			{ Read environment %windir% or %SystemRoot% }
+		'C:\WINDOWS\Fonts',	{ MS-Windows XP }
+		'C:\WINNT\Fonts'	{ MS-Windows 2000 }
+	);
+	MaxFontSearchNameNum = 6;
+	FontSearchName_Big: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 15;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Normal Font, 1 }
+			FontFile: 'meiryo.ttc';
+			FontFace: 0;
+			FontSize: 15;
+		), (	{ Normal Font, 2 }
+			FontFile: 'msgothic.ttc';
+			FontFace: 0;
+			FontSize: 15;
+		), (	{ Normal Font, 3 }
+			FontFile: 'msmincho.ttc';
+			FontFace: 0;
+			FontSize: 15;
+		), (	{ Default font }
+			FontFile: 'VeraBd.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		)
+	);
+	FontSearchName_Small: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 13;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 11;
+		), (	{ Normal Font, 1 }
+			FontFile: 'meiryo.ttc';
+			FontFace: 0;
+			FontSize: 13;
+		), (	{ Normal Font, 2 }
+			FontFile: 'msgothic.ttc';
+			FontFace: 0;
+			FontSize: 13;
+		), (	{ Normal Font, 3 }
+			FontFile: 'msmincho.ttc';
+			FontFace: 0;
+			FontSize: 13;
+		), (	{ Default font }
+			FontFile: 'VeraMoBd.ttf';
+			FontFace: 0;
+			FontSize: 11;
+		)
+	);
+{$ELSE}
+	MaxFontSearchDirNum = 3;
+	FontSearchDir: Array [1..MaxFontSearchDirNum] of String = (
+		'',			{ Read from gharena.cfg }
+		'Image',		{ default directory }
+		''			{ current directory }
+	);
+	MaxFontSearchNameNum = 3;
+	FontSearchName_Big: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Default font }
+			FontFile: 'VeraBd.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		)
+	);
+	FontSearchName_Small: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
+		(	{ Read from gharena.cfg }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 11;
+		), (	{ Read from GameData/I18N_settings.txt }
+			FontFile: '';
+			FontFace: 0;
+			FontSize: 11;
+		), (	{ Default font }
+			FontFile: 'VeraMoBd.ttf';
+			FontFace: 0;
+			FontSize: 11;
+		)
+	);
+{$ENDIF}
+
+	FontSize_Big: Integer = 0;
+	FontSize_Small: Integer = 0;
 	{ PATCH_I18N: Converted by Load_I18N_Default }
 	ProhibitationHead  : String = '! ) , . > ? ] }';
 	ProhibitationTrail : String = '( < [ {';
@@ -350,7 +578,7 @@ Function I18N_Help_Keymap_Desc_String( const MsgLabel: String ): String;
 
 implementation
 
-uses dos,i18nmsg,ability,gears,texutil;
+uses sysutils,dos,i18nmsg,ability,gears,texutil;
 
 
 var
@@ -378,6 +606,12 @@ begin
 	BVTypeName[4]      := I18N_MsgString('ui4gh','BVTypeName4');
 	ProhibitationHead                := I18N_Settings('ProhibitationHead',ProhibitationHead);
 	ProhibitationTrail               := I18N_Settings('ProhibitationTrail',ProhibitationTrail);
+	FontSearchName_Big[2].FontFile   := I18N_Settings('Default_FontFileBig',FontSearchName_Big[2].FontFile);
+	FontSearchName_Big[2].FontFace   := StrToInt(I18N_Settings('Default_FontFaceBig',IntToStr(FontSearchName_Big[2].FontFace)));
+	FontSearchName_Big[2].FontSize   := StrToInt(I18N_Settings('Default_FontSizeBig',IntToStr(FontSearchName_Big[2].FontSize)));
+	FontSearchName_Small[2].FontFile := I18N_Settings('Default_FontFileSmall',FontSearchName_Small[2].FontFile);
+	FontSearchName_Small[2].FontFace := StrToInt(I18N_Settings('Default_FontFaceSmall',IntToStr(FontSearchName_Small[2].FontFace)));
+	FontSearchName_Small[2].FontSize := StrToInt(I18N_Settings('Default_FontSizeSmall',IntToStr(FontSearchName_Small[2].FontSize)));
 end;
 
 
@@ -388,7 +622,22 @@ end;
 		F: Text;
 		S,CMD,C: String;
 		T: Integer;
+{$IF DEFINED(WINDOWS)}
+		WinDir: String;
+{$ENDIF}
 	begin
+{$IF DEFINED(WINDOWS)}
+		WinDir := '';
+		if '' = WinDir then begin
+			WinDir := GetEnvironmentVariable('SystemRoot');
+		end;
+		if '' = WinDir then begin
+			WinDir := GetEnvironmentVariable('windir');
+		end;
+		if '' <> WinDir then begin
+			FontSearchDir[4] := WinDir + DirectorySeparator + 'Fonts';
+		end;
+{$ENDIF}
 		{See whether or not there's a configuration file.}
 		S := FSearch(Config_File,'.');
 		if S <> '' then begin
@@ -527,6 +776,20 @@ end;
 						if ExtractTF(S) then I18N_UseOriginalName := True else I18N_UseOriginalName := False;
 					end else if cmd = 'I18N_USENAMEORG' then begin
 						if ExtractTF(S) then I18N_UseNameORG := True else I18N_UseNameORG := False;
+					end else if cmd = 'FONTFILEBIG' then begin
+						FontSearchName_Big[1].FontFile   := ExtractWord( S );
+						FontSearchName_Big[1].FontFace   := ExtractValue( S );
+						if FontSearchName_Big[1].FontFace < 0 then begin FontSearchName_Big[1].FontFace := 0; end;
+					end else if cmd = 'FONTFILESMALL' then begin
+						FontSearchName_Small[1].FontFile := ExtractWord( S );
+						FontSearchName_Small[1].FontFace := ExtractValue( S );
+						if FontSearchName_Small[1].FontFace < 0 then begin FontSearchName_Small[1].FontFace := 0; end;
+					end else if cmd = 'FONTSIZEBIG' then begin
+						FontSize_Big := ExtractValue( S );
+						if FontSize_Big < 1 then begin FontSize_Big := 0; end;
+					end else if cmd = 'FONTSIZESMALL' then begin
+						FontSize_Small := ExtractValue( S );
+						if FontSize_Small < 1 then begin FontSize_Small := 0; end;
 					end else if cmd = 'PROHIBITATIONTRAIL' then begin
 						ProhibitationTrail := S;
 					end else if cmd = 'PROHIBITATIONHEAD' then begin
@@ -627,6 +890,10 @@ end;
 
 		AddTrueFalse( 'I18N_USEORIGINALNAME' , I18N_UseOriginalName );
 		AddTrueFalse( 'I18N_USENAMEORG' , I18N_UseNameORG );
+		writeln( F , 'FONTFILEBIG ' + FontSearchName_Big[1].FontFile + ' ' + BStr( FontSearchName_Big[1].FontFace ) );
+		writeln( F , 'FONTFILESMALL ' + FontSearchName_Small[1].FontFile + ' ' + BStr( FontSearchName_Small[1].FontFace ) );
+		writeln( F , 'FONTSIZEBIG ' + BStr( FontSize_Big ) );
+		writeln( F , 'FONTSIZESMALL ' + BStr( FontSize_Small ) );
 		writeln( F , 'PROHIBITATIONTRAIL ' + ProhibitationTrail );
 		writeln( F , 'PROHIBITATIONHEAD ' + ProhibitationHead );
 		AddTrueFalse( 'SDL_AAFONT' , SDL_AAFont );

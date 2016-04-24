@@ -62,8 +62,6 @@ const
 
 	ScreenWidth = 800;
 	ScreenHeight = 600;
-	BigFontSize = 13;
-	SmallFontSize = 11;
 	Right_Column_Width = 220;
 	Dialog_Area_Height = 110;
 
@@ -1436,6 +1434,41 @@ begin
 	ClearExtendedBorder( ZONE_InteractInfo.GetRect() );
 end;
 
+
+Function SearchAndOpenFont( const FontInfo: PFontSearchNameDesc; arg_ptsize: integer ): PTTF_Font;
+const
+	TmpLen = 255;
+var
+	i, j: Integer;
+	FontFile: String;
+	tmp: array[0..TmpLen] of Char;
+	ptsize: Integer;
+begin
+	SearchAndOpenFont := NIL;
+	for j := 0 to (MaxFontSearchNameNum-1) do begin
+		for i := 1 to MaxFontSearchDirNum do begin
+			if 0 < Length(FontSearchDir[i]) then begin
+				FontFile := FontSearchDir[i] + OS_Dir_Separator + FontInfo[j].FontFile;
+			end else begin
+				FontFile := FontInfo[j].FontFile;
+			end;
+			ptsize := arg_ptsize;
+			if ptsize <= 0 then begin
+				ptsize := FontInfo[j].FontSize;
+			end;
+			if 0 < Length(FontInfo[j].FontFile) then begin
+				StrPCopy( tmp, FontFile );
+				SearchAndOpenFont := TTF_OpenFontIndex( @tmp, ptsize, FontInfo[j].FontFace );
+				if (NIL <> SearchAndOpenFont) then
+					break;
+			end;
+		end;
+		if (NIL <> SearchAndOpenFont) then
+			break;
+	end;
+end;
+
+
 Procedure SetupWizardDisplay();
     { This procedure will set the Wizard display decorations and resize all }
     { the relevant game zones. Yay? }
@@ -1550,12 +1583,16 @@ begin
 	Cursor_Sprite := ConfirmSprite( 'cursor.png' , '' , 8 , 16 );
 
 	TTF_Init;
-	Game_Font := TTF_OpenFont( 'Image' + OS_Dir_Separator + 'VeraBd.ttf' , BigFontSize );
-	Info_Font := TTF_OpenFont( 'Image' + OS_Dir_Separator + 'VeraMoBd.ttf' , SmallFontSize );
+	Game_Font := SearchAndOpenFont( @FontSearchName_Big, FontSize_Big );
+	Info_Font := SearchAndOpenFont( @FontSearchName_Small, FontSize_Small );
 
 	Text_Messages := LoadStringList( Standard_Message_File );
 	Console_History := Nil;
 
+	if (NIL = Game_Font) or (NIL = Info_Font) then begin
+		WriteLn('ERROR- No fonts were found.');
+		halt(1);
+	end;
 	SDL_WM_SetCaption( WindowName , IconName );
 
 	Animation_Phase := 0;
