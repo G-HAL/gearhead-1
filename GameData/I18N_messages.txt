@@ -40,6 +40,12 @@ NPCFLIRT_Bad                    <#2 asks #1 to go away.>
 %	#2 : PilotName(Target)
 NPCCHAT_OKAY                    <#1 chats with #2.>
 
+% arenacfe.pp StatusEffectCheck()
+%	#1 : PilotName(ATTACK_TMaster)
+%	#2 : BStr ATTACK_DamageDone)
+StatusEffectCheck_Status_FXDesc1        <#1 is hurt by poison! #2 damage.>
+StatusEffectCheck_Status_FXDesc2        <#1 is on fire! #2 damage.>
+
 % arenahq.pp PurchaseGear()
 %	#1 : GearName()
 %	#2 : Cost
@@ -521,6 +527,8 @@ SetPlayOptions_Enable_Mini-Map          <Enable Mini-Map>
 SetPlayOptions_Disable_Mini-Map         <Disable Mini-Map>
 SetPlayOptions_Enable_Name_Display      <Enable Name Display>
 SetPlayOptions_Disable_Name_Display     <Disable Name Display>
+SetPlayOptions_Disable_Accessibility+   <Disable Accessibility+>
+SetPlayOptions_Enable_Accessibility+    <Enable Accessibility+>
 SetPlayOptions_Exit                     <  Exit Prefrences>
 %
 % pcaction.pp AimThatAttack()
@@ -650,6 +658,9 @@ OpenShop_Browse_Wares           <Browse Wares>
 OpenShop_Exit_Shop              <Exit Shop>
 
 
+% coninfo.pp, sdlinfo.pp LocationInfo()
+LocationInfo_Dir:               <Dir:>
+LocationInfo_Alt:               <Alt:>
 % coninfo.pp, sdlinfo.pp JobAgeGenderDesc()
 %	#1 : age
 %	#2 : gender

@@ -100,11 +100,11 @@ Procedure HandleTriggers( GB: GameBoardPtr );
 implementation
 
 {$IFDEF SDLMODE}
-uses action,arenacfe,ability,damage,gearutil,ghchars,ghparser,ghmodule,
+uses i18nmsg,action,arenacfe,ability,damage,gearutil,ghchars,ghparser,ghmodule,
      ghprop,ghweapon,grabgear,interact,menugear,playwright,rpgdice,
      services,texutil,ui4gh,wmonster,sdlinfo,sdlmap,backpack;
 {$ELSE}
-uses action,arenacfe,ability,damage,gearutil,ghchars,ghparser,ghmodule,
+uses i18nmsg,action,arenacfe,ability,damage,gearutil,ghchars,ghparser,ghmodule,
      ghprop,ghweapon,grabgear,interact,menugear,playwright,rpgdice,backpack,
      services,texutil,ui4gh,wmonster,congfx,coninfo,conmap,context;
 {$ENDIF}
@@ -1096,12 +1096,15 @@ var
 	S0,S1,w: String;
 	ID,ID2: LongInt;
 	Part: GearPtr;
+	S1_tail: String;
+	DItS: Boolean;		{Do insert the space, or not.}
+	CW_I18N: Boolean;	{Is the current word I18N ?}
 begin
 	S0 := msg;
 	S1 := '';
 
 	while S0 <> '' do begin
-		w := ExtractWord( S0 );
+		w := ExtractWord( S0, DItS, CW_I18N );
 
 		if UpCase( W ) = '\MEK' then begin
 			{ Insert the name of a specified gear. }
@@ -1213,12 +1216,27 @@ begin
 			ID := ScriptValue( S0 , GB , Scene );
 
 			W := TimeString( ID );
+
+		end else if UpCase( W ) = '\NAME2' then begin
+			W := ExtractWord( S0 );
+			W := I18N_Name( W, ExtractWord( S0 ) );
+		end else if UpCase( W ) = '\NAME' then begin
+			W := I18N_Name( ExtractWord( S0 ) );
+
 		end;
 
-		if IsPunctuation( W[1] ) or ( S1[Length(S1)] = '$' ) or ( S1[Length(S1)] = '@' ) then begin
+		S1_tail := '';
+		if ( 1 <= Length(S1) ) then begin
+			S1_tail := Copy( S1, Length( S1 ), 1 );
+		end;
+		if ( ( 1 <= Length(W) ) and IsPunctuation( W[1] ) ) or ( '$' = S1_tail ) or ( '@' = S1_tail ) then begin
 			S1 := S1 + W;
 		end else begin
-			S1 := S1 + ' ' + W;
+			if DItS then begin
+				S1 := S1 + ' ' + W;
+			end else begin
+				S1 := S1 + W;
+			end;
 		end;
 
 	end;
@@ -1298,6 +1316,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg', id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if msg <> '' then DialogMsg( msg );
 end;
 
@@ -1309,6 +1328,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg', id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if msg <> '' then begin
 		YesNoMenu( GB , msg , '' , '' );
         {$IFNDEF SDLMODE}
@@ -1325,6 +1345,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg', id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if ( Scene <> Nil ) then SetSAtt( Scene^.SA , 'MEMO <' + msg + '>' );
 end;
 
@@ -1337,6 +1358,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg' , id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	Adv := GG_LocateAdventure( GB , Scene );
 	if ( msg <> '' ) and ( Adv <> Nil ) then AddSAtt( Adv^.SA , 'HISTORY' , msg );
 end;
@@ -1391,8 +1413,8 @@ begin
 
 		{ Store the stats. }
 		for t := 1 to 8 do begin
-			msg := StatName[ t ];
-			while Length( msg ) < 20 do msg := msg + ' ';
+			msg := I18N_Name( 'StatName', StatName[ t ] );
+			while WidthMBCharStr( msg ) < 20 do msg := msg + ' ';
 			msg := msg + BStr( PC^.Stat[ T ] );
 			V := ( PC^.Stat[ T ] + 2 ) div 3;
 			if V > 7 then V := 7;
@@ -1420,8 +1442,7 @@ begin
 		{ Store the faction and rank. }
 		Fac := GG_LocateFaction( NAttValue( PC^.NA , NAG_Personal , NAS_FactionID ) , GB , Nil );
 		if Fac <> Nil then begin
-			msg := ReplaceHash( MsgString( 'HISTORY_FACTION' ) , PCRankName( GB , Nil ) );
-			msg := ReplaceHash( msg , GearName( Fac ) );
+			msg := ReplaceHash( I18N_MsgString('ProcessVictory','History_Faction'), GearName(Fac), PCRankName(GB , Nil) );
 			StoreSAtt( VList , msg );
 			StoreSAtt( VList , ' ' );
 		end;
@@ -1430,8 +1451,7 @@ begin
 		for t := 1 to Num_Personality_Traits do begin
 			V := NATtValue( PC^.NA , NAG_CharDescription , -T );
 			if V <> 0 then begin
-				Msg := ReplaceHash( MsgString( 'HISTORY_Traits' ) , PersonalityTraitDesc( T , V ) );
-				Msg := ReplaceHash( msg , BStr( Abs( V ) ) );
+				Msg := ReplaceHash( I18N_MsgString('ProcessVictory','History_Traits'), PersonalityTraitDesc(T , V , True), BStr(Abs(V)) );
 				StoreSAtt( VList , msg );
 			end;
 		end;
@@ -1454,9 +1474,7 @@ begin
 		for t := 1 to NumSkill do begin
 			V := NATtValue( PC^.NA , NAG_Skill , T );
 			if V > 0 then begin
-				Msg := ReplaceHash( MsgString( 'HISTORY_Skills' ) , SkillMan[ T ].Name );
-				Msg := ReplaceHash( msg , BStr( V ) );
-				Msg := ReplaceHash( msg , BStr( SkillValue( PC , T ) ) );
+				Msg := ReplaceHash( I18N_MsgString('ProcessVictory','History_Skills'), I18N_Name('SkillMan',SkillMan[ T ].Name), BStr(V), BStr(SkillValue(PC , T)) );
 				StoreSAtt( VList , msg );
 			end;
 		end;
@@ -1521,6 +1539,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg' , id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if ( msg <> '' ) and ( Scene <> Nil ) then SetSAtt( Scene^.SA , 'NEWS <' + msg + '>' );
 end;
 
@@ -1533,6 +1552,7 @@ var
 begin
 	id := ScriptValue( Event , GB , Scene );
 	msg := getTheMessage( 'msg' , id , GB , Scene );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if ( msg <> '' ) and ( Scene <> Nil ) then SetSAtt( Scene^.SA , 'EMAIL <' + msg + '>' );
 	PC := GG_LocatePC( GB );
 	if ( PC <> Nil ) and HasPCommCapability( PC , PCC_EMail ) then DialogMsg( MsgString( 'AS_EMail' ) );
@@ -1572,6 +1592,7 @@ begin
 
 	id := ScriptValue( Event , GB , Source );
 	msg := getTheMessage( 'msg' , id , GB , Source );
+	msg := FormatChatStringByGender( msg, I_NPC );
 	if msg <> '' then begin
 {$IFDEF SDLMODE}
 		CHAT_Message := msg;
@@ -1595,20 +1616,22 @@ begin
 
 		msg := getthemessage( 'PROMPT' , N , GB , Source );
 		DeleteWhiteSpace( msg );
+		msg := FormatChatStringByGender( msg, I_PC );
 		if Msg <> '' then begin
 			AddRPGMenuItem( IntMenu , Msg , N );
-			RPMSortAlpha( IntMenu );
+			{ PATCH_I18N: In I18N, the character cord order sort causes an unpleasant result. }
+			{RPMSortAlpha( IntMenu );}
 		end;
 	end;
 end;
 
-Procedure ProcessSayAnything;
+Procedure ProcessSayAnything( NPC: GearPtr );
 	{ Print a random message in the interact message area. }
 begin
 {$IFDEF SDLMODE}
-	CHAT_Message := IdleChatter;
+	CHAT_Message := IdleChatter( NPC );
 {$ELSE}
-	GameMsg( IdleChatter , ZONE_InteractMsg , InfoHiLight );
+	GameMsg( IdleChatter( NPC ) , ZONE_InteractMsg , InfoHiLight );
 {$ENDIF}
 end;
 
@@ -1928,6 +1951,10 @@ begin
 	id := ScriptValue( Event , GB , Source );
 	NoPrompt := GetTheMessage( 'msg' , id , GB , Source );
 
+	Desc      := FormatChatStringByGender( Desc     , I_NPC );
+	YesPrompt := FormatChatStringByGender( YesPrompt, I_PC );
+	NoPrompt  := FormatChatStringByGender( NoPrompt , I_PC );
+
 	it := YesNoMenu( GB , Desc , YesPrompt , NoPrompt );
 
 	if it then IfSuccess( Event )
@@ -2041,6 +2068,8 @@ end;
 
 Procedure ProcessNewChat;
 	{ Reset the dialog menu with the standard options. }
+var
+	msg_chat, msg_bye, msg_join, msg_quit: String;
 begin
 	{ Error check - make sure the interaction menu is active. }
 	if IntMenu = Nil then begin
@@ -2052,11 +2081,17 @@ begin
 		ClearMenu( IntMenu );
 	end;
 
-	AddRPGMenuItem( IntMenu , '[Chat]' , CMD_Chat );
-	AddRPGMenuItem( IntMenu , '[Goodbye]' , -1 );
-	if ( I_NPC <> Nil ) and ( NAttValue( I_NPC^.NA , NAG_Relationship , 0 ) > 0 ) and ( NAttValue( I_NPC^.NA , NAG_Location , NAS_Team ) <> NAV_LancemateTeam ) then AddRPGMenuItem( IntMenu , '[Join]' , CMD_Join );
-	if ( I_NPC <> Nil ) and ( NAttValue( I_NPC^.NA , NAG_Location , NAS_Team ) = NAV_LancemateTeam ) then AddRPGMenuItem( IntMenu , '[Quit Lance]' , CMD_Quit );
-	RPMSortAlpha( IntMenu );
+	msg_chat := I18N_MsgString('ProcessNewChat','Chat');
+	msg_bye  := I18N_MsgString('ProcessNewChat','Goodbye');
+	msg_join := I18N_MsgString('ProcessNewChat','Join');
+	msg_quit := I18N_MsgString('ProcessNewChat','Quit Lance');
+
+	AddRPGMenuItem( IntMenu , msg_chat , CMD_Chat );
+	if ( I_NPC <> Nil ) and ( NAttValue( I_NPC^.NA , NAG_Relationship , 0 ) > 0 ) and ( NAttValue( I_NPC^.NA , NAG_Location , NAS_Team ) <> NAV_LancemateTeam ) then AddRPGMenuItem( IntMenu , msg_join , CMD_Join );
+	if ( I_NPC <> Nil ) and ( NAttValue( I_NPC^.NA , NAG_Location , NAS_Team ) = NAV_LancemateTeam ) then AddRPGMenuItem( IntMenu , msg_quit , CMD_Quit );
+	AddRPGMenuItem( IntMenu , msg_bye , -1 );
+	{ PATCH_I18N: In I18N, the character cord order sort causes an unpleasant result. }
+	{RPMSortAlpha( IntMenu );}
 end;
 
 Procedure ProcessEndChat;
@@ -3467,6 +3502,7 @@ begin
 
 	{Switch all known dispay descriptors. }
 	SwapSAtts( 'ROGUECHAR' );
+	SwapSAtts( 'NAME_ORG' );
 	SwapSAtts( 'NAME' );
 	SwapSAtts( 'SDL_SPRITE' );
 	SwapSAtts( 'SDL_COLORS' );
@@ -3891,7 +3927,7 @@ begin
 		    else if cmd = 'VICTORY' then ProcessVictory( GB )
 		    else if cmd = 'VMSG' then ProcessValueMessage( Event , GB , Source )
 		    else if cmd = 'SAY' then ProcessSay( Event , GB , Source )
-		    else if cmd = 'SAYANYTHING' then ProcessSayAnything()
+		    else if cmd = 'SAYANYTHING' then ProcessSayAnything( Source )
 		    else if cmd = 'IFGINPLAY' then ProcessIfGInPlay( Event , Source )
 		    else if cmd = 'IFGOK' then ProcessIfGOK( Event , Source )
 		    else if cmd = 'IFGEXISTS' then ProcessIfGExists( Event , Source )

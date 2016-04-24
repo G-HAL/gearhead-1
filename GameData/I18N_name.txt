@@ -1,5 +1,15 @@
 %%% GEARHEAD I18N NAME TABLE %%%
 
+% coninfo.pp DirStr[]
+DIR_E                           <E>
+DIR_SE                          <SE>
+DIR_S                           <S>
+DIR_SW                          <SW>
+DIR_W                           <W>
+DIR_NW                          <NW>
+DIR_N                           <N>
+DIR_NE                          <NE>
+
 % ghchars.pp StatName[]
 STATNAME_REFLEXES               <Reflexes>
 STATNAME_BODY                   <Body>

@@ -355,6 +355,7 @@ var
 			{C is the current GEAR being worked on.}
 	dest: Byte;	{DESTination of the next GEAR to be added.}
 			{ 0 = Sibling; 1 = SubCom; 2 = InvCom }
+	SattOrg: String;
 
 {*** LOCAL PROCEDURES FOR GHPARSER ***}
 
@@ -750,6 +751,7 @@ begin
 	if ( C = Nil ) or ( C^.G <> GG_Character ) then Exit;
 
 	while TheLine <> '' do begin
+		{ PATCH_I18N: Don't translate it. }
 		CCD_Cmd := ExtractWord( TheLine );
 
 		{ Check to see if this is a gender command. }
@@ -812,7 +814,29 @@ begin
 
 		end else if Pos('<',TheLine) > 0 then begin
 			{ *** STRING ATTRIBUTE *** }
-			if C <> Nil then SetSAtt(C^.SA,TheLine);
+			if C <> NIL then begin
+				if 'NAME ' = UpCase(Copy(TheLine,1,5)) then begin
+					SattOrg := SAttValue( C^.SA, 'NAME_ORG' );
+					if '' = SattOrg then begin
+						SattOrg := SAttValue( C^.SA, 'NAME' );
+						if '' <> SattOrg then begin
+							SetSAtt( C^.SA , 'NAME_ORG <' + SattOrg + '>' );
+						end;
+					end;
+					SetSAtt(C^.SA,TheLine);
+				end else if 'DESC ' = UpCase(Copy(TheLine,1,5)) then begin
+					SattOrg := SAttValue( C^.SA, 'DESC_ORG' );
+					if '' = SattOrg then begin
+						SattOrg := SAttValue( C^.SA, 'DESC' );
+						if '' <> SattOrg then begin
+							SetSAtt( C^.SA , 'DESC_ORG <' + SattOrg + '>' );
+						end;
+					end;
+					SetSAtt(C^.SA,TheLine);
+				end else begin
+					SetSAtt(C^.SA,TheLine);
+				end;
+			end;
 
 		end else begin
 			{ *** COMMAND LINE *** }

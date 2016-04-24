@@ -743,7 +743,7 @@ roguechar <*>
 stat 1 5
 stat 2 1
 effect <0 6 0 15 POISON ARMORIGNORE NOMETAL CANRESIST>
-fx_desc <# chokes for # damage!>
+fx_desc <#1 chokes for #2 damage!>
 
 Flame
 name <Fire>
@@ -752,7 +752,7 @@ roguechar <#>
 stat 1 3
 stat 2 3
 effect <0 3 0 13 BRUTAL CANRESIST>
-fx_desc <# is burnt by the fire for # damage!>
+fx_desc <#1 is burnt by the fire for #2 damage!>
 
 MetaTerrain 0 5
 name <Box>

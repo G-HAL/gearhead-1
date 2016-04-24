@@ -56,28 +56,46 @@ type
 
 
 const
-{$IF DEFINED(BSD)}
+{$IF DEFINED(LIBC_ICONV)}
+	libiconvname='c';
+{$ELSEIF DEFINED(LIBICONV_ICONV)}
 	libiconvname='iconv';
+{$ELSEIF DEFINED(BSD)}
+	libiconvname='iconv';
+{$ELSEIF DEFINED(LINUX)}
+	libiconvname='c';
+{$ELSEIF DEFINED(UNIX)}
+	libiconvname='iconv';
+{$ELSEIF DEFINED(WINDOWS)}
+	libiconvname='iconv.dll';
+{$ELSE}
+	libiconvname='iconv';
+{$ENDIF}
+{$IF DEFINED(LIBICONV_PLUG)}
+	libiconv_functionname_iconv_open	= 'iconv_open';
+	libiconv_functionname_iconv		= 'iconv';
+	libiconv_functionname_iconv_close	= 'iconv_close';
+{$ELSEIF DEFINED(LIBICONV_NOPLUG)}
+	libiconv_functionname_iconv_open	= 'libiconv_open';
+	libiconv_functionname_iconv		= 'libiconv';
+	libiconv_functionname_iconv_close	= 'libiconv_close';
+{$ELSEIF DEFINED(BSD)}
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';
 {$ELSEIF DEFINED(LINUX)}
-	libiconvname='c';
 	libiconv_functionname_iconv_open	= 'iconv_open';
 	libiconv_functionname_iconv		= 'iconv';
 	libiconv_functionname_iconv_close	= 'iconv_close';
 {$ELSEIF DEFINED(UNIX)}
-	libiconvname='iconv';
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';
 {$ELSEIF DEFINED(WINDOWS)}
-	libiconvname='iconv.dll';
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';
 {$ELSE}
-	libiconvname='iconv';
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';
