@@ -56,6 +56,7 @@ const
 	ControlMethod: Byte = MenuBasedInput;
 	CharacterMethod: Byte = RLBasedInput;
 	WorldMapMethod: Byte = RLBasedInput;
+	{ PATCH_I18N: Converted by Load_I18N_Default }
 	ControlTypeName: Array [0..1] of string = ('Menu','Roguelike');
 
 	DoFullScreen: Boolean = False;
@@ -76,6 +77,7 @@ const
 	DefMissileBV: Byte = BV_Quarter;
 	DefBallisticBV: Byte = BV_Max;
 	DefBeamgunBV: Byte = BV_Max;
+	{ PATCH_I18N: Converted by Load_I18N_Default }
 	BVTypeName: Array [1..4] of string = ('Off','1/4','1/2','Max');
 
 	DoAutoSave: Boolean = True;
@@ -332,9 +334,52 @@ const
 	KMC_SwitchTarget = 44;
 	KMC_RunToggle = 45;
 
+	{ PATCH_I18N: Converted by Load_I18N_Default }
+	ProhibitationHead  : String = '! ) , . > ? ] }';
+	ProhibitationTrail : String = '( < [ {';
+
+	I18N_UseNameORG : Boolean = False;
+const
+	SDL_AAFont        : Boolean = False;
+	SDL_AAFont_Shaded : Boolean = False;
+
+
+Function I18N_Help_Keymap_Name_String( const MsgLabel: String ): String;
+Function I18N_Help_Keymap_Desc_String( const MsgLabel: String ): String;
+
+
 implementation
 
-uses dos,ability,gears,texutil;
+uses dos,i18nmsg,ability,gears,texutil;
+
+
+var
+	I18N_Help_Keymap_Name: SAttPtr;
+	I18N_Help_Keymap_Desc: SAttPtr;
+
+
+Function I18N_Help_Keymap_Name_String( const MsgLabel: String ): String;
+begin
+	I18N_Help_Keymap_Name_String := SAttValue( I18N_Help_Keymap_Name, MsgLabel );
+end;
+
+Function I18N_Help_Keymap_Desc_String( const MsgLabel: String ): String;
+begin
+	I18N_Help_Keymap_Desc_String := SAttValue( I18N_Help_Keymap_Desc, MsgLabel );
+end;
+
+Procedure Load_I18N_Default;
+begin
+	ControlTypeName[0] := I18N_MsgString('ui4gh_ControlTypeName','Menu');
+	ControlTypeName[1] := I18N_MsgString('ui4gh_ControlTypeName','Roguelike');
+	BVTypeName[1]      := I18N_MsgString('ui4gh','BVTypeName1');
+	BVTypeName[2]      := I18N_MsgString('ui4gh','BVTypeName2');
+	BVTypeName[3]      := I18N_MsgString('ui4gh','BVTypeName3');
+	BVTypeName[4]      := I18N_MsgString('ui4gh','BVTypeName4');
+	ProhibitationHead                := I18N_Settings('ProhibitationHead',ProhibitationHead);
+	ProhibitationTrail               := I18N_Settings('ProhibitationTrail',ProhibitationTrail);
+end;
+
 
 	Procedure LoadConfig;
 		{ Open the configuration file and set the variables }
@@ -478,6 +523,20 @@ uses dos,ability,gears,texutil;
                     end else if cmd = 'ACCESSIBILITY_ON' then begin
                         Accessibility_On := True;
 
+					end else if cmd = 'I18N_USEORIGINALNAME' then begin
+						if ExtractTF(S) then I18N_UseOriginalName := True else I18N_UseOriginalName := False;
+					end else if cmd = 'I18N_USENAMEORG' then begin
+						if ExtractTF(S) then I18N_UseNameORG := True else I18N_UseNameORG := False;
+					end else if cmd = 'PROHIBITATIONTRAIL' then begin
+						ProhibitationTrail := S;
+					end else if cmd = 'PROHIBITATIONHEAD' then begin
+						ProhibitationHead := S;
+
+					end else if cmd = 'SDL_AAFONT' then begin
+						if ExtractTF(S) then SDL_AAFont := True else SDL_AAFont := False;
+					end else if cmd = 'SDL_AAFONT_SHADED' then begin
+						if ExtractTF(S) then SDL_AAFont_Shaded := True else SDL_AAFont_Shaded := False;
+
 				    end else if cmd[1] = '#' then begin
 					    S := '';
 
@@ -506,6 +565,15 @@ uses dos,ability,gears,texutil;
 			    writeln( F , '#' + OpTag );
 		    end;
 	    end;
+		Procedure AddTrueFalse( const OpTag: String; IsOn: Boolean );
+			{ Add one of the boolean options to the file. }
+		begin
+			if IsOn then begin
+				writeln( F , OpTag + ' TRUE' );
+			end else begin
+				writeln( F , OpTag + ' FALSE' );
+			end;
+		end;
     begin
 	    { If we've found a configuration file, }
 	    { open it up and start reading. }
@@ -557,16 +625,31 @@ uses dos,ability,gears,texutil;
 	    AddBoolean( 'ADVANCEDCOLORS' ,  UseAdvancedColoring );
 	    AddBoolean( 'ACCESSIBILITY_ON' ,  Accessibility_On );
 
+		AddTrueFalse( 'I18N_USEORIGINALNAME' , I18N_UseOriginalName );
+		AddTrueFalse( 'I18N_USENAMEORG' , I18N_UseNameORG );
+		writeln( F , 'PROHIBITATIONTRAIL ' + ProhibitationTrail );
+		writeln( F , 'PROHIBITATIONHEAD ' + ProhibitationHead );
+		AddTrueFalse( 'SDL_AAFONT' , SDL_AAFont );
+		AddTrueFalse( 'SDL_AAFONT_SHADED' , SDL_AAFont_Shaded );
+
 	    Close(F);
     end;
 
 
 initialization
+begin
+	I18N_Help_Keymap_Name := LoadStringList( I18N_Help_Keymap_Name_File );
+	I18N_Help_Keymap_Desc := LoadStringList( I18N_Help_Keymap_Desc_File );
+	Load_I18N_Default;
 
 	LoadConfig;
+end;
 
 finalization
-
-    SaveConfig;
+begin
+	SaveConfig;
+	DisposeSAtt( I18N_Help_Keymap_Desc );
+	DisposeSAtt( I18N_Help_Keymap_Name );
+end;
 
 end.
