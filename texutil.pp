@@ -75,10 +75,12 @@ Function DeleteWhiteSpace(var S: String): Boolean;
 Procedure DeleteFirstChar(var S: String);
 
 Function MBCharTrimedLength( const S: String; MaxWidth: Integer ): Integer;
-Function ExtractWord(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
+Function ExtractWordForParse(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
+Function ExtractWordForPrint(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
 Function ExtractWord(var S: String): String;
 Function ExtractValue(var S: String): LongInt;
 Function ExtractTF(var S: String): Boolean;
+Function EvaluateTF(S: String): Boolean;
 Function RetrieveAString(const S: String): String;
 Function RetrieveBracketString(const S: String): String;
 Function RetrieveAPreamble(const S: String ): String;
@@ -116,7 +118,11 @@ uses strings,
 {$ELSEIF DEFINED(WINDOWS)}
 	windows,
 {$ENDIF}
-	libiconv;
+	libiconv,i18nmsg;
+
+var
+	End_of_Word_Contains_WhiteSpace: Boolean = True;
+
 
 Function TextISO646_AllowableCheck( const C: Char ): Boolean;
 	{ Check, is a character C in ISO/IEC 646 (in other words, ISO 8859-1 G0 GL page), printable and allowable by SAtt in gears.pp. }
@@ -827,7 +833,7 @@ begin
 end;
 
 
-Function ExtractWord(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
+Function ExtractWord_Internal(var S: String; var SpaceDeleted,WordIsI18N: Boolean; EOW_Contains_SP: Boolean ): String;
 	{Extract the next word from string S.}
 	{Return this substring as the function's result;}
 	{truncate S so that it is now the remainder of the string.}
@@ -850,7 +856,7 @@ begin
 	if S <> '' then begin
 
 		{Determine the position of the next whitespace.}
-		if IsMBCharLeadByte(S[1]) then begin
+		if not(EOW_Contains_SP) and IsMBCharLeadByte(S[1]) then begin
 			{  When a function parse KANJI string, }
 			{ it is difficult to determine pauses of words. }
 			{  Therefore, this function return }
@@ -873,10 +879,12 @@ begin
 			if 0 < P then Len := P - 1
 			else Len := Length(S);
 
-			for I := 1 to Len do begin
-				if IsMBCharLeadByte(S[I]) then begin
-					P := I;
-					break;
+			if not(EOW_Contains_SP) then begin
+				for I := 1 to Len do begin
+					if IsMBCharLeadByte(S[I]) then begin
+						P := I;
+						break;
+					end;
 				end;
 			end;
 
@@ -894,7 +902,17 @@ begin
 		it := '';
 	end;
 
-	ExtractWord := it;
+	ExtractWord_Internal := it;
+end;
+
+Function ExtractWordForParse(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
+begin
+	ExtractWordForParse := ExtractWord_Internal( S , SpaceDeleted , WordIsI18N , False );
+end;
+
+Function ExtractWordForPrint(var S: String; var SpaceDeleted,WordIsI18N: Boolean ): String;
+begin
+	ExtractWordForPrint := ExtractWord_Internal( S , SpaceDeleted , WordIsI18N , End_of_Word_Contains_WhiteSpace );
 end;
 
 Function ExtractWord(var S: String): String;
@@ -1005,6 +1023,14 @@ begin
 	if '0'  = S2 then Exit(False);
 
 	ExtractTF := False;
+end;
+
+Function EvaluateTF(S: String): Boolean;
+var
+	S2: String;
+begin
+	S2 := ExtractWord(S);
+	EvaluateTF := ExtractTF(S2);
 end;
 
 Function RetrieveAString(const S: String): String;
@@ -1307,6 +1333,17 @@ begin
                 msg_out := msg;
 	end;
 	ReplaceHash := msg_out;
+end;
+
+
+
+initialization
+begin
+	End_of_Word_Contains_WhiteSpace := EvaluateTF(I18N_Settings('END_OF_WORD_CONTAINS_WHITESPACE',''));
+end;
+
+finalization
+begin
 end;
 
 end.

@@ -1847,7 +1847,7 @@ begin
 
 		AReq.FXName := '';
 		while msg <> '' do begin
-			C := ExtractWord( msg, DItS, CW_I18N );
+			C := ExtractWordForParse( msg, DItS, CW_I18N );
 			while ( 2 <= Length(C) ) and ( '%' = C[1] ) do begin
 				W := '';
 				if ( 'A' = C[2] ) then begin
