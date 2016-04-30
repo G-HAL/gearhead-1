@@ -39,7 +39,7 @@ var
 
 implementation
 
-uses i18nmsg;
+uses i18nmsg,texutil;
 
 
 Function Parse_EncType( const encoding: String; var charset: String ): enc_type;
@@ -110,7 +110,6 @@ end;
 Procedure Get_tenc();
 var
 	codec: String;
-	bidiRTL: String;
 begin
 	codec := '';
 	if '' = codec then begin
@@ -145,11 +144,7 @@ begin
 
 	TENC := Parse_EncType( codec, TERMINAL_CHARSET );
 
-	bidiRTL := I18N_Settings('TERMINAL_ENCODING_CONV_bidiRTL','');
-	case bidiRTL[1] of
-	'T':	TERMINAL_bidiRTL := True;
-	'F':	TERMINAL_bidiRTL := False;
-	end;
+	TERMINAL_bidiRTL := EvaluateTF( I18N_Settings('TERMINAL_ENCODING_CONV_bidiRTL','') );
 	TERMINAL_bidiRTL_Punctuation := ' '  + I18N_Settings('bidiRTL_CONVERT_PUNCTUATION','');
 	TERMINAL_bidiRTL_ConvPair1   := '< ' + I18N_Settings('bidiRTL_CONVERT_CHAR_PAIR1','');
 	TERMINAL_bidiRTL_ConvPair2   := '> ' + I18N_Settings('bidiRTL_CONVERT_CHAR_PAIR2','');
@@ -262,7 +257,6 @@ finalization
 begin
 	libiconv.iconv_close( iconv_utf16toenc );
 	libiconv.iconv_close( iconv_enc2utf16 );
-
 	libiconv.iconv_close( iconv_tenc2enc );
 	libiconv.iconv_close( iconv_enc2tenc );
 end;

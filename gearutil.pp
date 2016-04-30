@@ -473,7 +473,7 @@ begin
 	S1 := '';
 
 	while S0 <> '' do begin
-		W := ExtractWord( S0, DItS, CW_I18N );
+		W := ExtractWordForParse( S0, DItS, CW_I18N );
 
 		if UpCase( W ) = '\NAME2' then begin
 			W := ExtractWord( S0 );

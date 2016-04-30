@@ -827,7 +827,7 @@ begin
 	{ the actual element names. }
 	if R0 <> '' then begin
 		while R0 <> '' do begin
-			W := ExtractWord( R0, DItS, CW_I18N );
+			W := ExtractWordForParse( R0, DItS, CW_I18N );
 
 			{ If a string begins with !, it's to be replaced. }
 			if W[1] = '!' then begin

@@ -1112,7 +1112,7 @@ begin
 	S1 := '';
 
 	while S0 <> '' do begin
-		w := ExtractWord( S0, DItS, CW_I18N );
+		w := ExtractWordForParse( S0, DItS, CW_I18N );
 
 		if UpCase( W ) = '\MEK' then begin
 			{ Insert the name of a specified gear. }
@@ -1230,7 +1230,6 @@ begin
 			W := I18N_Name( W, ExtractWord( S0 ) );
 		end else if UpCase( W ) = '\NAME' then begin
 			W := I18N_Name( ExtractWord( S0 ) );
-
 		end;
 
 		S1_tail := '';

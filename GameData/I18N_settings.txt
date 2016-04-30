@@ -4,6 +4,7 @@
 SYSTEM_ENCODING                 <SINGLEBYTE-ISO8859-1>
 TERMINAL_ENCODING_DEFAULT       <SINGLEBYTE-ISO8859-1>
 TERMINAL_ENCODING_DEFAULT_MSWIN <SINGLEBYTE-ISO8859-1>
+End_of_Word_Contains_WhiteSpace <True>
 TERMINAL_ENCODING_CONV_bidiRTL  <False>
 bidiRTL_CONVERT_PUNCTUATION     <:;,.>
 bidiRTL_CONVERT_CHAR_PAIR1      <( [ {>
@@ -21,7 +22,7 @@ MSWIN_Default_FontNameOther     <Terminal>
 MSWIN_Default_FontWeightOther   <0>
 MSWIN_Default_FontSizeOther     <14>
 
-ProhibitationTrail        <( [ {>
-ProhibitationHead         <! ) , . ? ] }>
+ProhibitationTrail      <( [ {>
+ProhibitationHead       <! ) , . ? ] }>
 
 %%% [ End of File ] %%%

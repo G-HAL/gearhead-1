@@ -779,7 +779,7 @@ begin
 
 	{ Start building the line. }
 	repeat
-		NextWord := ExtractWord( Msg, DItS, CW_I18N );
+		NextWord := ExtractWordForPrint( Msg, DItS, CW_I18N );
 
 		if '' <> NextWord then
 			if False = CW_I18N then begin
@@ -812,7 +812,7 @@ begin
 	if ( TheLine[Length(TheLine)] = #13 ) then begin
 		{ Display the line break as a space. }
 		TheLine[Length(TheLine)] := ' ';
-		NextWord := ExtractWord( Msg, DItS, CW_I18N );
+		NextWord := ExtractWordForPrint( Msg, DItS, CW_I18N );
 	end;
 
 end;

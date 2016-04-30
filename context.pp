@@ -256,7 +256,7 @@ begin
 
 	{THELine = The first word in this iteration}
 	LW_I18N := False;
-	THELine := ExtractWord( msg, DItS, CW_I18N );
+	THELine := ExtractWordForPrint( msg, DItS, CW_I18N );
 
 	{Start the main processing loop.}
 	while TheLine <> '' do begin
@@ -265,7 +265,7 @@ begin
 
 		{ Start building the line. }
 		repeat
-			NextWord := ExtractWord( Msg, DItS, CW_I18N );
+			NextWord := ExtractWordForPrint( Msg, DItS, CW_I18N );
 
 			if (False = LW_I18N) and (False = CW_I18N) then begin
 				DItS := True;
@@ -288,7 +288,7 @@ begin
 		if ( TheLine[Length(TheLine)] = #13 ) then begin
 			{ Display the line break as a space. }
 			TheLine[Length(TheLine)] := ' ';
-			NextWord := ExtractWord( msg, DItS, CW_I18N );
+			NextWord := ExtractWordForPrint( msg, DItS, CW_I18N );
 		end;
 
 		{ Output the line. }
@@ -344,7 +344,7 @@ begin
 
 	{THELine = The first word in this iteration}
 	LW_I18N := False;
-	THELine := ExtractWord( msg, DItS, CW_I18N );
+	THELine := ExtractWordForPrint( msg, DItS, CW_I18N );
 
 	{Start the main processing loop.}
 	while TheLine <> '' do begin
@@ -353,7 +353,7 @@ begin
 
 		{ Start building the line. }
 		repeat
-			NextWord := ExtractWord( Msg, DItS, CW_I18N );
+			NextWord := ExtractWordForPrint( Msg, DItS, CW_I18N );
 
 			if (False = LW_I18N) and (False = CW_I18N) then begin
 				DItS := True;
@@ -376,7 +376,7 @@ begin
 		if ( TheLine[Length(TheLine)] = #13 ) then begin
 			{ Display the line break as a space. }
 			TheLine[Length(TheLine)] := ' ';
-			NextWord := ExtractWord( msg, DItS, CW_I18N );
+			NextWord := ExtractWordForPrint( msg, DItS, CW_I18N );
 		end;
 
 		{ Output the line. }
