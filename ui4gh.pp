@@ -342,25 +342,21 @@ const
 	KMC_RunToggle = 45;
 
 {$IF DEFINED(UNIX)}
-	MaxFontSearchDirNum = 7;
+	MaxFontSearchDirNum = 11;
 	FontSearchDir: Array [1..MaxFontSearchDirNum] of String = (
-		'',					{ Read from gharena.cfg }
-		'Image',				{ default directory }
-		'',					{ current directory }
-  {$IF DEFINED(FONTFILE_USR_X11R6)}
-		'/usr/X11R6/lib/X11/fonts/TrueType',	{ FreeBSD 6.2 and before, some Distribution of GNU/Linux }
-  {$ELSEIF DEFINED(FONTFILE_USR_LOCAL)}
-		'/usr/local/lib/X11/fonts/TrueType',	{ FreeBSD 6.3 and later }
-  {$ELSEIF DEFINED(FONTFILE_USR_SHARE)}
-		'/usr/share/fonts/truetype/sazanami',	{ Debian GNU/Linux }
-  {$ELSE}
-		'',
-  {$ENDIF}
-		'/usr/X11R6/lib/X11/fonts/TrueType',	{ FreeBSD 6.2 and before, some Distribution of GNU/Linux }
-		'/usr/local/lib/X11/fonts/TrueType',	{ FreeBSD 6.3 and later }
-		'/usr/share/fonts/truetype/sazanami'	{ Debian GNU/Linux }
+		'',						{ Read from gharena.cfg }
+		'Image',					{ default directory }
+		'',						{ current directory }
+		'/usr/local/share/fonts/gnu-unifont-ttf',	{ Failback Directory, FreeBSD 9.x and later }
+		'/usr/local/share/fonts/OTF',			{ Failback Directory, FreeBSD 9.x and later }
+		'/usr/local/share/fonts/TTF',			{ Failback Directory, FreeBSD 9.x and later }
+		'/usr/local/lib/X11/fonts/TrueType',		{ Failback Directory, FreeBSD 6.3 and later }
+		'/usr/X11R6/lib/X11/fonts/TrueType',		{ Failback Directory, FreeBSD 6.2 and before, some Distribution of GNU/Linux }
+		'/usr/share/fonts/truetype/unifont',		{ Failback Directory, Debian GNU/Linux }
+		'/usr/share/fonts/truetype/sazanami',		{ Failback Directory, Debian GNU/Linux }
+		'/usr/share/fonts/opentype/ipafont-gothic'	{ Failback Directory, Debian GNU/Linux }
 	);
-	MaxFontSearchNameNum = 11;
+	MaxFontSearchNameNum = 14;
 	FontSearchName_Big: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
 		(	{ Read from gharena.cfg }
 			FontFile: '';
@@ -370,39 +366,51 @@ const
 			FontFile: '';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 1 }
+		), (	{ Failback Font, 1 }
+			FontFile: 'unifont.ttf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Failback Font, 2 }
 			FontFile: 'sazanami-gothic.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 2 }
+		), (	{ Failback Font, 3 }
 			FontFile: 'sazanami-mincho.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 3 }
+		), (	{ Failback Font, 4 }
+			FontFile: 'ipag.otf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Failback Font, 5 }
+			FontFile: 'ipam.otf';
+			FontFace: 0;
+			FontSize: 14;
+		), (	{ Failback Font, 6 }
 			FontFile: 'ipag.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 4 }
+		), (	{ Failback Font, 7 }
 			FontFile: 'ipam.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 5 }
+		), (	{ Failback Font, 8 }
 			FontFile: 'kochi-gothic-subst.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 6 }
+		), (	{ Failback Font, 9 }
 			FontFile: 'kochi-mincho-subst.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 7 }
+		), (	{ Failback Font, 10 }
 			FontFile: 'kochi-gothic.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 8 }
+		), (	{ Failback Font, 11 }
 			FontFile: 'kochi-mincho.ttf';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Default font }
+		), (	{ Failback Font, Default }
 			FontFile: 'VeraBd.ttf';
 			FontFace: 0;
 			FontSize: 14;
@@ -417,39 +425,51 @@ const
 			FontFile: '';
 			FontFace: 0;
 			FontSize: 11;
-		), (	{ Normal Font, 1 }
+		), (	{ Failback Font, 1 }
+			FontFile: 'unifont.ttf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Failback Font, 2 }
 			FontFile: 'sazanami-gothic.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 2 }
+		), (	{ Failback Font, 3 }
 			FontFile: 'sazanami-mincho.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 3 }
+		), (	{ Failback Font, 4 }
+			FontFile: 'ipag.otf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Failback Font, 5 }
+			FontFile: 'ipam.otf';
+			FontFace: 0;
+			FontSize: 12;
+		), (	{ Failback Font, 6 }
 			FontFile: 'ipag.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 4 }
+		), (	{ Failback Font, 7 }
 			FontFile: 'ipam.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 5 }
+		), (	{ Failback Font, 8 }
 			FontFile: 'kochi-gothic-subst.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 6 }
+		), (	{ Failback Font, 9 }
 			FontFile: 'kochi-mincho-subst.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 7 }
+		), (	{ Failback Font, 10 }
 			FontFile: 'kochi-gothic.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Normal Font, 8 }
+		), (	{ Failback Font, 11 }
 			FontFile: 'kochi-mincho.ttf';
 			FontFace: 0;
 			FontSize: 12;
-		), (	{ Default font }
+		), (	{ Failback Font, Default }
 			FontFile: 'VeraMoBd.ttf';
 			FontFace: 0;
 			FontSize: 11;
@@ -461,9 +481,9 @@ const
 		'',			{ Read from gharena.cfg }
 		'Image',		{ default directory }
 		'',			{ current directory }
-		'',			{ Read environment %windir% or %SystemRoot% }
-		'C:\WINDOWS\Fonts',	{ MS-Windows XP }
-		'C:\WINNT\Fonts'	{ MS-Windows 2000 }
+		'',			{ Failback Directory, Read environment %windir% or %SystemRoot% }
+		'C:\WINDOWS\Fonts',	{ Failback Directory, MS-Windows XP, MS-Windows 7, MS-Windows 8.1, Wine }
+		'C:\WINNT\Fonts'	{ Failback Directory, MS-Windows 2000 }
 	);
 	MaxFontSearchNameNum = 6;
 	FontSearchName_Big: Array [1..MaxFontSearchNameNum] of FontSearchNameDesc = (
@@ -475,19 +495,19 @@ const
 			FontFile: '';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Normal Font, 1 }
+		), (	{ Failback Font, 1 }
 			FontFile: 'meiryo.ttc';
 			FontFace: 0;
 			FontSize: 15;
-		), (	{ Normal Font, 2 }
+		), (	{ Failback Font, 2 }
 			FontFile: 'msgothic.ttc';
 			FontFace: 0;
 			FontSize: 15;
-		), (	{ Normal Font, 3 }
+		), (	{ Failback Font, 3 }
 			FontFile: 'msmincho.ttc';
 			FontFace: 0;
 			FontSize: 15;
-		), (	{ Default font }
+		), (	{ Failback Font, Default }
 			FontFile: 'VeraBd.ttf';
 			FontFace: 0;
 			FontSize: 14;
@@ -502,19 +522,19 @@ const
 			FontFile: '';
 			FontFace: 0;
 			FontSize: 11;
-		), (	{ Normal Font, 1 }
+		), (	{ Failback Font, 1 }
 			FontFile: 'meiryo.ttc';
 			FontFace: 0;
 			FontSize: 13;
-		), (	{ Normal Font, 2 }
+		), (	{ Failback Font, 2 }
 			FontFile: 'msgothic.ttc';
 			FontFace: 0;
 			FontSize: 13;
-		), (	{ Normal Font, 3 }
+		), (	{ Failback Font, 3 }
 			FontFile: 'msmincho.ttc';
 			FontFace: 0;
 			FontSize: 13;
-		), (	{ Default font }
+		), (	{ Failback Font, Default }
 			FontFile: 'VeraMoBd.ttf';
 			FontFace: 0;
 			FontSize: 11;
@@ -537,7 +557,7 @@ const
 			FontFile: '';
 			FontFace: 0;
 			FontSize: 14;
-		), (	{ Default font }
+		), (	{ Failback Font, Default }
 			FontFile: 'VeraBd.ttf';
 			FontFace: 0;
 			FontSize: 14;
