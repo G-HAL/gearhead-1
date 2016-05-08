@@ -485,7 +485,8 @@ begin
 	Part := List;
 	N := 1;
 	while Part <> Nil do begin
-		msg := SAttValue( Part^.SA , 'desig' );
+		msg := SAttValue( Part^.SA , 'DESIG_I18N' );
+		if ( '' = msg ) then msg := SAttValue( Part^.SA , 'DESIG' );
 		if msg <> '' then msg := msg + ' ' + GearName( Part )
 		else msg := GearName( Part );
 		AddRPGMenuItem( BrowseMenu , msg , N );

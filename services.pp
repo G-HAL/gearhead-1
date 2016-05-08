@@ -2259,7 +2259,7 @@ begin
             if (City <> Nil) and ( City <> GB^.Scene ) and ( ( Fac = Nil ) or ( NAttValue( Fac^.NA , NAG_FactionScore , GetFactionID( City ) ) >= 0 ) ) then begin
 			{ Do the range check. }
 			    if AStringHasBString( SAttValue( City^.SA , 'TYPE' ) , 'DESTINATION' ) and (range(X0,y0,x1,y1) <= MaxShuttleRange) then begin
-				    AddRPGMenuItem( RPM , GearName( City ) + ' ($' + BStr( TravelCost( World, Entrance , X0 , Y0 ) ) + ')' , City^.S , SAttValue( City^.SA , 'DESC' ) );
+				    AddRPGMenuItem( RPM , GearName( City ) + ' ($' + BStr( TravelCost( World, Entrance , X0 , Y0 ) ) + ')' , City^.S , FormatDescString(City) );
 			    end;
 		    end;
 

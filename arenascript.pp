@@ -2564,6 +2564,7 @@ begin
 		if Grabbed_Gear <> Nil then begin
 			{ Clear the designation. }
 			SetSAtt( Grabbed_Gear^.SA , 'DESIG <>' );
+			SetSAtt( Grabbed_Gear^.SA , 'DESIG_I18N <>' );
 
 			{ Deploy the item. }
 			DeployMek( GB , Grabbed_Gear , False );
@@ -3509,8 +3510,8 @@ begin
 
 	{Switch all known dispay descriptors. }
 	SwapSAtts( 'ROGUECHAR' );
-	SwapSAtts( 'NAME_ORG' );
 	SwapSAtts( 'NAME' );
+	SwapSAtts( 'NAME_I18N' );
 	SwapSAtts( 'SDL_SPRITE' );
 	SwapSAtts( 'SDL_COLORS' );
 	SetNAtt( Source^.NA , NAG_Display , NAS_PrimaryFrame , NAttValue( Source^.NA , NAG_Display , N ) );
@@ -3852,10 +3853,10 @@ begin
             { This NPC will become an ally of some type. }
         	if IsSexy( PC , NPC ) and ( Random( 200 ) < CReact ) then begin
                 SetNAtt(NPC^.NA,NAG_Relationship,0,NAV_Lover);
-                DialogMsg(ReplaceHash(MsgString('BONDING_LOVE'),SAttValue(NPC^.SA,'NAME')));
+                DialogMsg(ReplaceHash(MsgString('BONDING_LOVE'),GearName(NPC)));
             end else begin
                 SetNAtt(NPC^.NA,NAG_Relationship,0,NAV_ArchAlly);
-                DialogMsg(ReplaceHash(MsgString('BONDING_ALLY'),SAttValue(NPC^.SA,'NAME')));
+                DialogMsg(ReplaceHash(MsgString('BONDING_ALLY'),GearName(NPC)));
             end;
         end else begin
             { This NPC is not ready to become an ally. Add some like. }

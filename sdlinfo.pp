@@ -1183,7 +1183,7 @@ begin
 	N := GearCurrentArmor( Part );
 	if N > 0 then msg := BStr( N )
 	else msg := '-';
-	AI_PrintFromRight( 'Damage: ' + msg, 8 , HitsColor( Part ) );
+	AI_PrintFromRight( ReplaceHash( I18N_MsgString('LFGI_ForItems','Armor:') , msg ) , 8 , ArmorColor( Part ) );
 	AI_NextLine;
 
 	AI_PrintFromRight( ReplaceHash( I18N_MsgString('LFGI_ForItems','Mass:') , MassString( Part ) ) , 8 , InfoGreen );
@@ -1200,7 +1200,7 @@ begin
     CDest.X := CZone.X;
     CDest.W := CZone.W;
     AI_Text( ExtendedDescription( Part ) , InfoGreen );
-    msg := SAttValue( Part^.SA , 'DESC' );
+    msg := FormatDescString(Part);
     if msg <> '' then AI_Text( msg, InfoGreen );
 end;
 
@@ -1269,7 +1269,7 @@ begin
 		MyDest.Y := n;
 		MyDest.W := 170;
 		MyDest.H := CZone.Y + CZone.H - n;
-		GameMsg( SAttValue( Part^.SA, 'DESC' ) , MyDest , InfoGreen, Info_Font );
+		GameMsg( FormatDescString(Part) , MyDest , InfoGreen, Info_Font );
 	end;
 end;
 
@@ -1351,7 +1351,7 @@ begin
     MyDest.Y := CZone.Y + TTF_FontLineSkip( Info_Font ) + 165;
     MyDest.W := MyDest.W - 20;
     MyDest.H := MyDest.H - ( CDest.Y - CZone.Y ) - 40 - TTF_FontLineSkip( Info_Font );
-    GameMsg( SAttValue( Part^.SA , 'DESC' ) , MyDest , InfoGreen );
+    GameMsg( FormatDescString(Part) , MyDest , InfoGreen );
 end;
 
 
