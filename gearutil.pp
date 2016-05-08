@@ -421,14 +421,14 @@ begin
 	if Part = Nil then Exit( '' );
 
 	if I18N_UseNameORG then begin
-		it := SAttValue(Part^.SA,'NAME_ORG');
-		if '' = it then begin
-			it := SAttValue(Part^.SA,'NAME');
-		end;
-	end else begin
 		it := SAttValue(Part^.SA,'NAME');
 		if '' = it then begin
-			it := SAttValue(Part^.SA,'NAME_ORG');
+			it := SAttValue(Part^.SA,'NAME_I18N');
+		end;
+	end else begin
+		it := SAttValue(Part^.SA,'NAME_I18N');
+		if '' = it then begin
+			it := SAttValue(Part^.SA,'NAME');
 		end;
 	end;
 
@@ -445,7 +445,8 @@ Function FullGearName(Part: GearPtr): String;
 var
 	it: String;
 begin
-	it := SAttValue( Part^.SA , 'DESIG' );
+	it := SAttValue( Part^.SA , 'DESIG_I18N' );
+	if ( '' = it ) then it := SAttValue( Part^.SA , 'DESIG' );
 	if it <> '' then it := it + ' ';
 	FullGearName := it + GearName( Part );
 end;
@@ -457,7 +458,7 @@ var
 begin
 	it := GearName( Part );
 	if LengthMBChar(it[1]) <= 1 then Exit(it[1]);
-	it := SAttValue(Part^.SA,'NAME_ORG');
+	it := SAttValue(Part^.SA,'NAME');
 	if '' = it then Exit(#0);
 	InitialGearName := it[1];
 end;
@@ -469,7 +470,8 @@ var
 	DItS: Boolean;		{Do insert the space, or not.}
 	CW_I18N: Boolean;	{Is the current word I18N ?}
 begin
-	S0 := SAttValue( Part^.SA , 'DESC' );
+	S0 := SAttValue( Part^.SA , 'DESC_I18N' );
+	if ( '' = S0 ) then S0 := SAttValue( Part^.SA , 'DESC' );
 	S1 := '';
 
 	while S0 <> '' do begin
@@ -1476,8 +1478,8 @@ begin
 	it := Nil;
 	Name := UpCase( Name );
 	while LList <> Nil do begin
-		if UpCase( GearName( LList ) ) = Name then it := LList;
-		if ( it = Nil ) then if UpCase( SAttValue( LList^.SA , 'NAME_ORG' ) ) = Name then it := LList;
+		if UpCase( SAttValue( LList^.SA , 'NAME' ) ) = Name then it := LList;
+		if ( it = Nil ) then if UpCase( GearName( LList ) ) = Name then it := LList;
 		if ( it = Nil ) then it := SeekGearByName( LList^.SubCom , Name );
 		if ( it = Nil ) then it := SeekGearByName( LList^.InvCom , Name );
 		LList := LList^.Next;
@@ -1495,7 +1497,7 @@ begin
 	Name := UpCase( Name );
 	while LList <> Nil do begin
 		if UpCase( SAttValue( LList^.SA , 'DESIG' ) ) = Name then it := LList;
-		if ( it = Nil ) then if UpCase( SAttValue( LList^.SA , 'DESIG_ORG' ) ) = Name then it := LList;
+		if ( it = Nil ) then if UpCase( SAttValue( LList^.SA , 'DESIG_I18N' ) ) = Name then it := LList;
 		if ( it = Nil ) then it := SeekGearByDesig( LList^.SubCom , Name );
 		if ( it = Nil ) then it := SeekGearByDesig( LList^.InvCom , Name );
 		LList := LList^.Next;

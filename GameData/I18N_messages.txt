@@ -610,8 +610,8 @@ SelectAge_years_old             <# years old>
 
 % randmaps.pp AddDoor()
 %	# : Door name
-RANDMAPS_DoorSign_org           <Door of #>
 RANDMAPS_DoorSign               <Door of #>
+RANDMAPS_DoorSign_I18N          <Door of #>
 
 % services.pp PurchaseGear()
 %	#1 : GearName()

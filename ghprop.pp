@@ -107,7 +107,7 @@ Procedure InitMetaTerrain( Part: GearPtr );
 	{ the terrain type it's supposed to represent. }
 var
 	Name: String;
-	Name_org: String;
+	Name_I18N: String;
 begin
 	{ If this is a part for which we have a standard script, }
 	{ install that script now. }
@@ -115,12 +115,12 @@ begin
 		SetNAtt( Part^.NA , NAG_Display , 0 , Meta_Terrain_Sprite[ Part^.S ] );
 		SetSAtt( Part^.SA , 'ROGUECHAR <' + SAttValue( Meta_Terrain_Scripts[ Part^.S ] , 'roguechar' ) + '>' );
 		Name := SAttValue( Meta_Terrain_Scripts[ Part^.S ] , 'NAME' );
-		Name_org := SAttValue( Meta_Terrain_Scripts[ Part^.S ] , 'NAME_ORG' );
-		if Length(Name_org) <= 0 then begin
-			Name_org := Name;
+		Name_I18N := SAttValue( Meta_Terrain_Scripts[ Part^.S ] , 'NAME_I18N' );
+		if Length(Name) <= 0 then begin
+			Name := Name_I18N;
 		end;
-		SetSAtt( Part^.SA , 'NAME_ORG <' + Name_org + '>' );
 		SetSAtt( Part^.SA , 'NAME <' + Name + '>' );
+		SetSAtt( Part^.SA , 'NAME_I18N <' + Name_I18N + '>' );
 		SetSAtt( Part^.SA , 'SDL_SPRITE <' + SAttValue( Meta_Terrain_Scripts[ Part^.S ] , 'SDL_SPRITE' ) + '>' );
 	end;
 
