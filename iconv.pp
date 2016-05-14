@@ -142,6 +142,10 @@ begin
 		codec := I18N_Settings('SYSTEM_ENCODING','');
 	end;
 
+	if 'C' = UpCase(codec) then begin
+		codec := 'ISO8859-1';
+	end;
+
 	TENC := Parse_EncType( codec, TERMINAL_CHARSET );
 
 	TERMINAL_bidiRTL := EvaluateTF( I18N_Settings('TERMINAL_ENCODING_CONV_bidiRTL','') );
