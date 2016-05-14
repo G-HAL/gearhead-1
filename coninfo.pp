@@ -729,7 +729,6 @@ Function JobAgeGenderDesc( NPC: GearPtr ): String;
 	{ a nicely formatted string. }
 var
 	gender: String;
-	msg,job: String;
 begin
 	gender := '';
 	if NAttValue( NPC^.NA , NAG_CharDescription , NAS_Gender ) <> NAV_Undefined then begin

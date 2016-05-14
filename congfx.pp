@@ -146,7 +146,7 @@ Procedure SetupInteractDisplay( TeamColor: Byte );
 
 implementation
 
-uses ui4gh;
+uses iconv,ui4gh;
 
 {$I boxdraw.inc}
 
@@ -188,39 +188,67 @@ begin
 	TextColor(Color);
 	TextBackground( Black );
 
+	if ( 'ISO8859-1' = TERMINAL_CHARSET ) then begin
 {$IFDEF NeedShifts}
-	ShiftAltCharset;
+		ShiftAltCharset;
 {$ENDIF}
 
-	{Print the four corners.}
-	GotoXY(X1,Y1);
-	write(BoxUpperLeft);
-	GotoXY(X2,Y1);
-	write(BoxUpperRight);
-	GotoXY(X1,Y2);
-	write(BoxLowerLeft);
-	GotoXY(X2,Y2);
-	write(BoxLowerRight);
+		{Print the four corners.}
+		GotoXY(X1,Y1);
+		write(BoxUpperLeft);
+		GotoXY(X2,Y1);
+		write(BoxUpperRight);
+		GotoXY(X1,Y2);
+		write(BoxLowerLeft);
+		GotoXY(X2,Y2);
+		write(BoxLowerRight);
 
-	{Print the two horizontal edges.}
-	for t := X1+1 to X2-1 do begin
-		GotoXY(t,Y1);
-		write(BoxHorizontal);
-		GotoXY(t,Y2);
-		write(BoxHorizontal);
-	end;
+		{Print the two horizontal edges.}
+		for t := X1+1 to X2-1 do begin
+			GotoXY(t,Y1);
+			write(BoxHorizontal);
+			GotoXY(t,Y2);
+			write(BoxHorizontal);
+		end;
 
-	{Print the two vertical edges.}
-	for t := Y1+1 to Y2-1 do begin
-		GotoXY(X1,t);
-		write(BoxVertical);
-		GotoXY(X2,t);
-		write(BoxVertical);
-	end;
+		{Print the two vertical edges.}
+		for t := Y1+1 to Y2-1 do begin
+			GotoXY(X1,t);
+			write(BoxVertical);
+			GotoXY(X2,t);
+			write(BoxVertical);
+		end;
 
 {$IFDEF NeedShifts}
-	ShiftNormalCharset;
+		ShiftNormalCharset;
 {$ENDIF}
+	end else begin
+		{Print the four corners.}
+		GotoXY(X1,Y1);
+		write(BoxUpperLeft_I18N);
+		GotoXY(X2,Y1);
+		write(BoxUpperRight_I18N);
+		GotoXY(X1,Y2);
+		write(BoxLowerLeft_I18N);
+		GotoXY(X2,Y2);
+		write(BoxLowerRight_I18N);
+
+		{Print the two horizontal edges.}
+		for t := X1+1 to X2-1 do begin
+			GotoXY(t,Y1);
+			write(BoxHorizontal_I18N);
+			GotoXY(t,Y2);
+			write(BoxHorizontal_I18N);
+		end;
+
+		{Print the two vertical edges.}
+		for t := Y1+1 to Y2-1 do begin
+			GotoXY(X1,t);
+			write(BoxVertical_I18N);
+			GotoXY(X2,t);
+			write(BoxVertical_I18N);
+		end;
+	end;
 
 end;
 
@@ -276,14 +304,20 @@ var
 begin
 	DrawZoneBorder( ScreenZone[ ZONE_EqpMenu , 1 ] - 1 , ScreenZone[ ZONE_EqpMenu , 2 ] - 1 , ScreenZone[ ZONE_InvMenu , 3 ] + 1 , ScreenZone[ ZONE_InvMenu , 4 ] + 1 , White );
 	GotoXY( ScreenZone[ ZONE_EqpMenu , 1 ] , ScreenZone[ ZONE_EqpMenu , 4 ] + 1 );
+	if ( 'ISO8859-1' = TERMINAL_CHARSET ) then begin
 {$IFDEF NeedShifts}
-	ShiftAltCharset;
+		ShiftAltCharset;
 {$ENDIF}
-	for t := 1 to (ScreenZone[ ZONE_EqpMenu , 3 ] - ScreenZone[ ZONE_EqpMenu , 1 ] + 1 ) do
-		write(BoxSeperator);
+		for t := 1 to (ScreenZone[ ZONE_EqpMenu , 3 ] - ScreenZone[ ZONE_EqpMenu , 1 ] + 1 ) do
+			write(BoxSeperator);
 {$IFDEF NeedShifts}
-	ShiftNormalCharset;
+		ShiftNormalCharset;
 {$ENDIF}
+	end else begin
+		for t := 1 to (ScreenZone[ ZONE_EqpMenu , 3 ] - ScreenZone[ ZONE_EqpMenu , 1 ] + 1 ) do begin
+			write(BoxSeperator_I18N);
+		end;
+	end;
 
 end;
 
@@ -324,14 +358,20 @@ begin
 	ClrZone( ZONE_YesNoTotal );
 	DrawZoneBorder( ZONE_YesNoTotal  , LightBlue );
 	GotoXY( ScreenZone[ ZONE_YesNoMenu , 1 ] , ScreenZone[ ZONE_YesNoMenu , 2 ] - 1 );
+	if ( 'ISO8859-1' = TERMINAL_CHARSET ) then begin
 {$IFDEF NeedShifts}
-	ShiftAltCharset;
+		ShiftAltCharset;
 {$ENDIF}
-	for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do
-		write(BoxSeperator);
+		for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do
+			write(BoxSeperator);
 {$IFDEF NeedShifts}
-	ShiftNormalCharset;
+		ShiftNormalCharset;
 {$ENDIF}
+	end else begin
+		for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do begin
+			write(BoxSeperator_I18N);
+		end;
+	end;
 end;
 
 Procedure SetupMemoDisplay;
@@ -342,14 +382,20 @@ begin
 	ClrZone( ZONE_YesNoTotal );
 	DrawZoneBorder( ZONE_YesNoTotal  , LightMagenta );
 	GotoXY( ScreenZone[ ZONE_YesNoMenu , 1 ] , ScreenZone[ ZONE_YesNoMenu , 2 ] - 1 );
+	if ( 'ISO8859-1' = TERMINAL_CHARSET ) then begin
 {$IFDEF NeedShifts}
-	ShiftAltCharset;
+		ShiftAltCharset;
 {$ENDIF}
-	for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do
-		write(BoxSeperator);
+		for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do
+			write(BoxSeperator);
 {$IFDEF NeedShifts}
-	ShiftNormalCharset;
+		ShiftNormalCharset;
 {$ENDIF}
+	end else begin
+		for t := 1 to (ScreenZone[ ZONE_YesNoMenu , 3 ] - ScreenZone[ ZONE_YesNoMenu , 1 ] + 1 ) do begin
+			write(BoxSeperator_I18N);
+		end;
+	end;
 end;
 
 Procedure SetupInteractDisplay( TeamColor: Byte );
