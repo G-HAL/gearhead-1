@@ -199,6 +199,138 @@ JOBS_WARLORD                    <Warlord>
 JOBS_WARRIOR_MONK               <Warrior Monk>
 JOBS_WARRIOR                    <Warrior>
 
+% arenascript.pp , Series/ADV_FederatedTerritories.txt FACRANK
+%                               <the Solar Navy>
+FACRANK_1_0                     <Recruit>
+FACRANK_1_1                     <Private>
+FACRANK_1_2                     <Corporal>
+FACRANK_1_3                     <Sergeant>
+FACRANK_1_4                     <Lieutenant>
+FACRANK_1_5                     <Captain>
+FACRANK_1_6                     <Major>
+FACRANK_1_7                     <Colonel>
+FACRANK_1_8                     <Admiral>
+%                               <the Federation Defense Force>
+FACRANK_2_0                     <Recruit>
+FACRANK_2_1                     <Private>
+FACRANK_2_2                     <Corporal>
+FACRANK_2_3                     <Sergeant>
+FACRANK_2_4                     <Lieutenant>
+FACRANK_2_5                     <Captain>
+FACRANK_2_6                     <Major>
+FACRANK_2_7                     <Colonel>
+FACRANK_2_8                     <General>
+%                               <the Guardians>
+FACRANK_3_0                     <Recruit>
+FACRANK_3_1                     <Patrolman>
+FACRANK_3_2                     <Ranger>
+FACRANK_3_3                     <Detective>
+FACRANK_3_4                     <Sergeant>
+FACRANK_3_5                     <Junior Inspector>
+FACRANK_3_6                     <Inspector>
+FACRANK_3_7                     <Superintendent>
+FACRANK_3_8                     <Commissioner>
+%                               <Kettel Industries>
+FACRANK_4_0                     <Wage Slave>
+FACRANK_4_1                     <Employee of the Month>
+FACRANK_4_2                     <Committee Head>
+FACRANK_4_3                     <Assistant Junior Manager>
+FACRANK_4_4                     <Junior Manager>
+FACRANK_4_5                     <Manager>
+FACRANK_4_6                     <Senior Manager>
+FACRANK_4_7                     <Branch Director>
+FACRANK_4_8                     <Vice President>
+%                               <BioCorp>
+FACRANK_5_0                     <Wage Slave>
+FACRANK_5_1                     <Employee of the Month>
+FACRANK_5_2                     <Committee Head>
+FACRANK_5_3                     <Assistant Junior Manager>
+FACRANK_5_4                     <Junior Manager>
+FACRANK_5_5                     <Manager>
+FACRANK_5_6                     <Senior Manager>
+FACRANK_5_7                     <Branch Director>
+FACRANK_5_8                     <Vice President>
+%                               <RegEx Corporation>
+FACRANK_6_0                     <Wage Slave>
+FACRANK_6_1                     <Employee of the Month>
+FACRANK_6_2                     <Committee Head>
+FACRANK_6_3                     <Assistant Junior Manager>
+FACRANK_6_4                     <Junior Manager>
+FACRANK_6_5                     <Manager>
+FACRANK_6_6                     <Senior Manager>
+FACRANK_6_7                     <Branch Director>
+FACRANK_6_8                     <Vice President>
+%                               <Aegis Overlord Luna>
+FACRANK_7_0                     <Recruit>
+FACRANK_7_1                     <Private>
+FACRANK_7_2                     <Corporal>
+FACRANK_7_3                     <Sergeant>
+FACRANK_7_4                     <Lieutenant>
+FACRANK_7_5                     <Captain>
+FACRANK_7_6                     <Major>
+FACRANK_7_7                     <Colonel>
+FACRANK_7_8                     <General>
+%
+FACRANK_8_0                     <Recruit>
+FACRANK_8_1                     <Private>
+FACRANK_8_2                     <Corporal>
+FACRANK_8_3                     <Sergeant>
+FACRANK_8_4                     <Lieutenant>
+FACRANK_8_5                     <Captain>
+FACRANK_8_6                     <Major>
+FACRANK_8_7                     <Colonel>
+FACRANK_8_8                     <General>
+%                               <Clan Ironwind>
+FACRANK_9_0                     <Recruit>
+FACRANK_9_1                     <Private>
+FACRANK_9_2                     <Corporal>
+FACRANK_9_3                     <Sergeant>
+FACRANK_9_4                     <Lieutenant>
+FACRANK_9_5                     <Captain>
+FACRANK_9_6                     <Major>
+FACRANK_9_7                     <Colonel>
+FACRANK_9_8                     <General>
+%                               <the Bone Devil gang>
+FACRANK_10_0                    <Recruit>
+FACRANK_10_1                    <Private>
+FACRANK_10_2                    <Corporal>
+FACRANK_10_3                    <Sergeant>
+FACRANK_10_4                    <Lieutenant>
+FACRANK_10_5                    <Captain>
+FACRANK_10_6                    <Major>
+FACRANK_10_7                    <Colonel>
+FACRANK_10_8                    <General>
+%                               <the Federation Council>
+FACRANK_11_0                    <Recruit>
+FACRANK_11_1                    <Private>
+FACRANK_11_2                    <Corporal>
+FACRANK_11_3                    <Sergeant>
+FACRANK_11_4                    <Lieutenant>
+FACRANK_11_5                    <Captain>
+FACRANK_11_6                    <Major>
+FACRANK_11_7                    <Colonel>
+FACRANK_11_8                    <General>
+%                               <HwangSa Temple>
+FACRANK_12_0                    <Neophyte>
+FACRANK_12_1                    <Initiate>
+FACRANK_12_2                    <Devotee>
+FACRANK_12_3                    <Adept>
+FACRANK_12_4                    <Master of the Four Winds>
+FACRANK_12_5                    <Master of the World Tree>
+FACRANK_12_6                    <Master of the Silver Waves>
+FACRANK_12_7                    <Master of the Dragon's Flame>
+FACRANK_12_8                    <Master of the Sun and Moon>
+%                               <the Thieves Guild>
+FACRANK_13_0                    <Delinquent>
+FACRANK_13_1                    <Pickpocket>
+FACRANK_13_2                    <Thief>
+FACRANK_13_3                    <Rogue>
+FACRANK_13_4                    <Scoundrel>
+FACRANK_13_5                    <Pirate>
+FACRANK_13_6                    <Expert Thief>
+FACRANK_13_7                    <Master Thief>
+FACRANK_13_8                    <Criminal Mastermind>
+
 % locale.pp TerrMan[].name
 TerrMan_Open_Ground             <Open Ground>
 TerrMan_Light_Forest            <Light Forest>

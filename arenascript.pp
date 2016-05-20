@@ -1054,7 +1054,10 @@ begin
 	end else begin
 		{ First check the faction for a name there. }
 		{ If the faction has no name set, use the default. }
-		it := SAttValue( F^.SA , 'FacRank_' + BStr( FRank ) );
+		it := I18N_Name('FacRank',BStr(FID) + '_' + BStr(FRank));
+		if '' = it then begin
+			it := SAttValue( F^.SA , 'FacRank_' + BStr( FRank ) );
+		end;
 		if it = '' then it := MSgString( 'FacRank_' + BStr( FRank ) );
 	end;
 
