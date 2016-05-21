@@ -11,6 +11,7 @@ Function I18N_Settings( const MsgLabel: String; const DefaultMsg: String ): Stri
 Function I18N_Name( const CategoryLabel, MsgLabel: String; const I18N: Boolean ): String;
 Function I18N_Name( const CategoryLabel, MsgLabel: String ): String;
 Function I18N_Name_withDefault( const MsgLabel, DefaultMsg: String ): String;
+Function I18N_Name_NoFailback( const CategoryLabel, MsgLabel: String ): String;
 Function I18N_Name( const MsgLabel: String ): String;
 Function I18N_MsgString( const CategoryLabel, MsgLabel: String; const I18N: Boolean ): String;
 Function I18N_MsgString( const CategoryLabel, MsgLabel: String ): String;
@@ -108,6 +109,16 @@ begin
 		if (0 = Length(I18N_Name_withDefault)) then begin
 			I18N_Name_withDefault := DefaultMsg;
 		end;
+	end;
+end;
+
+
+Function I18N_Name_NoFailback( const CategoryLabel, MsgLabel: String ): String;
+begin
+	if I18N_UseOriginalName then begin
+		I18N_Name_NoFailback := '';
+	end else begin
+		I18N_Name_NoFailback := SAttValue( I18N_Name_SAtt, ConcatenateLabel( CategoryLabel, MsgLabel) );
 	end;
 end;
 
