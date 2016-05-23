@@ -810,10 +810,6 @@ end;
 					end else if cmd = 'FONTSIZESMALL' then begin
 						FontSize_Small := ExtractValue( S );
 						if FontSize_Small < 1 then begin FontSize_Small := 0; end;
-					end else if cmd = 'PROHIBITATIONTRAIL' then begin
-						ProhibitationTrail := S;
-					end else if cmd = 'PROHIBITATIONHEAD' then begin
-						ProhibitationHead := S;
 
 					end else if cmd = 'SDL_AAFONT' then begin
 						if ExtractTF(S) then SDL_AAFont := True else SDL_AAFont := False;
@@ -914,8 +910,6 @@ end;
 		writeln( F , 'FONTFILESMALL ' + FontSearchName_Small[1].FontFile + ' ' + BStr( FontSearchName_Small[1].FontFace ) );
 		writeln( F , 'FONTSIZEBIG ' + BStr( FontSize_Big ) );
 		writeln( F , 'FONTSIZESMALL ' + BStr( FontSize_Small ) );
-		writeln( F , 'PROHIBITATIONTRAIL ' + ProhibitationTrail );
-		writeln( F , 'PROHIBITATIONHEAD ' + ProhibitationHead );
 		AddTrueFalse( 'SDL_AAFONT' , SDL_AAFont );
 		AddTrueFalse( 'SDL_AAFONT_SHADED' , SDL_AAFont_Shaded );
 
