@@ -25,7 +25,7 @@ unit texutil;
 
 interface
 
-uses sysutils, iconv;
+uses sysutils, termenc;
 
 Function TextISO646_AllowableCheck( const c: Char ): Boolean;
 
@@ -118,7 +118,12 @@ uses strings,
 {$ELSEIF DEFINED(WINDOWS)}
 	windows,
 {$ENDIF}
-	libiconv,i18nmsg;
+{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+	libiconv,
+{$ELSE}
+	iconvenc,
+{$ENDIF}
+	i18nmsg;
 
 var
 	End_of_Word_Contains_WhiteSpace: Boolean = True;
@@ -438,7 +443,7 @@ begin
 	work_psrc := PChar(psrc);	work_srclen := srclen;
 	work_pdst := pdst;	work_dstlen := dstlen - 1;	// -1 for #00
 	while (0 < work_srclen) do begin
-		iconv_result := libiconv.iconv( iconv_utf16toenc,
+		iconv_result := iconv( iconv_utf16toenc,
 					@work_psrc, @work_srclen, @work_pdst, @work_dstlen );
 		if (work_dstlen < 8) then
 			break;
@@ -448,7 +453,7 @@ begin
 			work_pdst := work_pdst + 6;	work_dstlen := work_dstlen - 6;
 		end;
 	end;
-	iconv_result := libiconv.iconv( iconv_utf16toenc,
+	iconv_result := iconv( iconv_utf16toenc,
 				NIL, NIL, @work_pdst, @work_dstlen );
 	work_pdst[0] := #0;
 	Conv_FromUni16 := (dstlen - 1 - work_dstlen);
@@ -465,7 +470,7 @@ begin
 	work_psrc := psrc;	work_srclen := srclen;
 	work_pdst := PChar(pdst);	work_dstlen := dstlen - 2;	// -2 for #0000
 	while (0 < work_srclen) do begin
-		iconv_result := libiconv.iconv( iconv_enc2utf16,
+		iconv_result := iconv( iconv_enc2utf16,
 					@work_psrc, @work_srclen, @work_pdst, @work_dstlen );
 		if (work_dstlen < 16) then
 			break;
@@ -473,11 +478,11 @@ begin
 			StrPCopy( tmp, '#$' + IntToHex(Ord(work_psrc[0]),2) );
 			ptmp := tmp;	work_tmplen := 4;
 			Inc( work_psrc );	Dec( work_srclen );
-			iconv_result := libiconv.iconv( iconv_enc2utf16,
+			iconv_result := iconv( iconv_enc2utf16,
 						@ptmp, @work_tmplen, @work_pdst, @work_dstlen );
 		end;
 	end;
-	iconv_result := libiconv.iconv( iconv_enc2utf16,
+	iconv_result := iconv( iconv_enc2utf16,
 				NIL, NIL, @work_pdst, @work_dstlen );
 	work_pdst[0] := #0; work_pdst[1] := #0;
 	Conv_ToUni16 := (dstlen - 2 - work_dstlen) div 2;
@@ -493,7 +498,7 @@ begin
 	work_psrc := psrc;	work_srclen := srclen;
 	work_pdst := pdst;	work_dstlen := dstlen - 1;	// -1 for #00
 	while (0 < work_srclen) do begin
-		iconv_result := libiconv.iconv( iconv_tenc2enc,
+		iconv_result := iconv( iconv_tenc2enc,
 					@work_psrc, @work_srclen, @work_pdst, @work_dstlen );
 		if (work_dstlen < 8) then
 			break;
@@ -503,7 +508,7 @@ begin
 			work_pdst := work_pdst + 6;	work_dstlen := work_dstlen - 6;
 		end;
 	end;
-	iconv_result := libiconv.iconv( iconv_tenc2enc,
+	iconv_result := iconv( iconv_tenc2enc,
 				NIL, NIL, @work_pdst, @work_dstlen );
 	work_pdst[0] := #0;
 	Conv_FromTenc := (dstlen - 1 - work_dstlen);
@@ -520,7 +525,7 @@ begin
 	work_psrc := psrc;	work_srclen := srclen;
 	work_pdst := pdst;	work_dstlen := dstlen - 2;	// -2 for #0000
 	while (0 < work_srclen) do begin
-		iconv_result := libiconv.iconv( iconv_enc2tenc,
+		iconv_result := iconv( iconv_enc2tenc,
 					@work_psrc, @work_srclen, @work_pdst, @work_dstlen );
 		if (work_dstlen < 16) then
 			break;
@@ -528,11 +533,11 @@ begin
 			StrPCopy( tmp, '#$' + IntToHex(Ord(work_psrc[0]),2) );
 			ptmp := tmp;	work_tmplen := 4;
 			Inc( work_psrc );	Dec( work_srclen );
-			iconv_result := libiconv.iconv( iconv_enc2tenc,
+			iconv_result := iconv( iconv_enc2tenc,
 						@ptmp, @work_tmplen, @work_pdst, @work_dstlen );
 		end;
 	end;
-	iconv_result := libiconv.iconv( iconv_enc2tenc,
+	iconv_result := iconv( iconv_enc2tenc,
 				NIL, NIL, @work_pdst, @work_dstlen );
 	work_pdst[0] := #0; work_pdst[1] := #0;
 	Conv_ToTenc := (dstlen - 2 - work_dstlen);

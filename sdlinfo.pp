@@ -55,7 +55,7 @@ Procedure MechaEngineeringInfo( Mek: GearPtr; GB: GameBoardPtr; Z: DynamicRect )
 
 implementation
 
-uses i18nmsg,iconv,ghmodule,ghweapon,ghmecha,ghchars,ghsupport,ghmovers,ui4gh;
+uses i18nmsg,termenc,ghmodule,ghweapon,ghmecha,ghchars,ghsupport,ghmovers,ui4gh;
 
 const
 	StatusPerfect:TSDL_Color =	( r:  0; g:255; b: 65 );

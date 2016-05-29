@@ -49,7 +49,7 @@ Procedure MoreText( LList: SAttPtr; FirstLine: Integer );
 
 implementation
 
-uses crt,iconv,texutil,ui4gh,congfx;
+uses crt,termenc,texutil,ui4gh,congfx;
 
 Procedure WriteMBCharStr( const arg_msg: String; Xwidth: Integer );
 	{ NOTE: In CJK, there are many charctors, one charactor have double size for one ANK charactor and data length is 3 or 4 bytes. }
