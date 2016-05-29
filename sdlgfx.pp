@@ -243,7 +243,7 @@ Procedure SetupWizardDisplay();
 
 implementation
 
-uses i18nmsg,iconv;
+uses i18nmsg,termenc;
 
 const
 	WindowName: PChar = 'GearHead Arena SDL Version';

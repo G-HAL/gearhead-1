@@ -93,7 +93,7 @@ Function SelectFile( RPM: RPGMenuPtr; ReDrawer: RedrawProcedureType ): String;
 
 implementation
 
-uses iconv;
+uses termenc;
 
 Function LastMenuItem(MIList: RPGMenuItemPtr): RPGMenuItemPtr;
 	{This procedure will find the last item in the linked list.}

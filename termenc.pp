@@ -1,8 +1,14 @@
-unit iconv;
+unit termenc;
 
 interface
 
-uses sysutils, libiconv;
+uses sysutils,
+{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+	libiconv
+{$ELSE}
+	iconvenc
+{$ENDIF}
+	;
 
 
 type
@@ -194,10 +200,10 @@ begin
 	if (CP932 = SENC) and (EUCJP = TENC) then begin
 		StrPCopy( tenc_cstr, 'EUCJP-MS' );
 	end;
-	iconv_enc2tenc := libiconv.iconv_open( tenc_cstr, senc_cstr );
-	iconv_tenc2enc := libiconv.iconv_open( senc_cstr, tenc_cstr );
+	iconv_enc2tenc := iconv_open( tenc_cstr, senc_cstr );
+	iconv_tenc2enc := iconv_open( senc_cstr, tenc_cstr );
 	if (iconv_t(-1) = iconv_enc2tenc) or (iconv_t(-1) = iconv_tenc2enc) then begin
-		WriteLn('ERROR- iconv initialization failed. (system encoding "' + SYSTEM_CHARSET + '", terminal encoding "' + TERMINAL_CHARSET + '")');
+		WriteLn('ERROR- termenc initialization failed. (system encoding "' + SYSTEM_CHARSET + '", terminal encoding "' + TERMINAL_CHARSET + '")');
 		halt(255);
 	end;
 end;
@@ -211,18 +217,32 @@ begin
 	{ Initialize conversion tables. }
 	StrPCopy( uenc_cstr, UNICODE_CHARSET );
 	StrPCopy( senc_cstr, SYSTEM_CHARSET );
-	iconv_enc2utf16 := libiconv.iconv_open( uenc_cstr, senc_cstr );
-	iconv_utf16toenc := libiconv.iconv_open( senc_cstr, uenc_cstr );
+	iconv_enc2utf16 := iconv_open( uenc_cstr, senc_cstr );
+	iconv_utf16toenc := iconv_open( senc_cstr, uenc_cstr );
 	if (iconv_t(-1) = iconv_enc2utf16) or (iconv_t(-1) = iconv_utf16toenc) then begin
-		WriteLn('ERROR- iconv initialization failed. (system encoding "' + SYSTEM_CHARSET + '", unicode encoding "' + UNICODE_CHARSET + '")');
+		WriteLn('ERROR- termenc initialization failed. (system encoding "' + SYSTEM_CHARSET + '", unicode encoding "' + UNICODE_CHARSET + '")');
 		halt(255);
 	end;
 end;
 
 
 
+{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+{$ELSE}
+var
+	iconvenc_errmsg: AnsiString;
+{$ENDIF}
+
 initialization
 begin
+{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+{$ELSE}
+	if not iconvenc.InitIconv(iconvenc_errmsg) then begin
+		Writeln('iconvenc initialization failed:', iconvenc_errmsg );
+		halt;
+	end;
+{$ENDIF}
+
 {$IF DEFINED(ENCODING_SINGLEBYTE)}
 	SENC := SINGLEBYTE;
 	SYSTEM_CHARSET := '';
@@ -259,10 +279,10 @@ end;
 
 finalization
 begin
-	libiconv.iconv_close( iconv_utf16toenc );
-	libiconv.iconv_close( iconv_enc2utf16 );
-	libiconv.iconv_close( iconv_tenc2enc );
-	libiconv.iconv_close( iconv_enc2tenc );
+	iconv_close( iconv_utf16toenc );
+	iconv_close( iconv_enc2utf16 );
+	iconv_close( iconv_tenc2enc );
+	iconv_close( iconv_enc2tenc );
 end;
 
 end.

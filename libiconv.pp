@@ -60,6 +60,8 @@ const
 	libiconvname='c';
 {$ELSEIF DEFINED(LIBICONV_ICONV)}
 	libiconvname='iconv';
+{$ELSEIF DEFINED(FREEBSD)}
+	libiconvname='iconv';
 {$ELSEIF DEFINED(BSD)}
 	libiconvname='iconv';
 {$ELSEIF DEFINED(LINUX)}
@@ -79,7 +81,11 @@ const
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';
-{$ELSEIF DEFINED(BSD)}
+{$ELSEIF DEFINED(FREEBSD)}	{ libiconv-1.14_9 package or later package }
+	libiconv_functionname_iconv_open	= 'iconv_open';
+	libiconv_functionname_iconv		= 'iconv';
+	libiconv_functionname_iconv_close	= 'iconv_close';
+{$ELSEIF DEFINED(BSD)}		{ libiconv-1.14_8 package or before package }
 	libiconv_functionname_iconv_open	= 'libiconv_open';
 	libiconv_functionname_iconv		= 'libiconv';
 	libiconv_functionname_iconv_close	= 'libiconv_close';

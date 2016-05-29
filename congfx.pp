@@ -146,7 +146,7 @@ Procedure SetupInteractDisplay( TeamColor: Byte );
 
 implementation
 
-uses iconv,ui4gh;
+uses termenc,ui4gh;
 
 {$I boxdraw.inc}
 
