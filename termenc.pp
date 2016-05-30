@@ -3,7 +3,7 @@ unit termenc;
 interface
 
 uses sysutils,
-{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+{$IF DEFINED(VER2) or not DEFINED(UNIX) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
 	libiconv
 {$ELSE}
 	iconvenc
@@ -227,7 +227,7 @@ end;
 
 
 
-{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+{$IF DEFINED(VER2) or not DEFINED(UNIX) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
 {$ELSE}
 var
 	iconvenc_errmsg: AnsiString;
@@ -235,7 +235,7 @@ var
 
 initialization
 begin
-{$IF DEFINED(VER2) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
+{$IF DEFINED(VER2) or not DEFINED(UNIX) or DEFINED(USE_ICONV_SUBSTITUTE_WRAPPER)}
 {$ELSE}
 	if not iconvenc.InitIconv(iconvenc_errmsg) then begin
 		Writeln('iconvenc initialization failed:', iconvenc_errmsg );
