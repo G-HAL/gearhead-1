@@ -45,6 +45,7 @@ NPCCHAT_OKAY                    <#1 chats with #2.>
 %	#2 : BStr ATTACK_DamageDone)
 StatusEffectCheck_Status_FXDesc1        <#1 is hurt by poison! #2 damage.>
 StatusEffectCheck_Status_FXDesc2        <#1 is on fire! #2 damage.>
+StatusEffectCheck_Status_FXDesc3        <#1 has been restored #2 damage.>
 
 % arenahq.pp PurchaseGear()
 %	#1 : GearName()
