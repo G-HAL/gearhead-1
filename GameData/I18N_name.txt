@@ -198,6 +198,7 @@ JOBS_VILLAGER                   <Villager>
 JOBS_WARLORD                    <Warlord>
 JOBS_WARRIOR_MONK               <Warrior Monk>
 JOBS_WARRIOR                    <Warrior>
+JOBS_SWASHBUCKLER               <Swashbuckler>
 
 % arenascript.pp , Series/ADV_FederatedTerritories.txt FACRANK
 %                               <the Solar Navy>
