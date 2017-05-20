@@ -212,7 +212,7 @@ begin
 				FX2 := FX^.Next;
 				if ( FX^.G = NAG_StatusEffect ) then begin
 					if SX_Effect_String[ FX^.S ] <> '' then begin
-						EffectFrontEnd( GB , M , SX_Effect_String[ FX^.S ] , I18N_MsgString( 'Status_FXDesc' + BStr( FX^.S ) ) );
+						EffectFrontEnd( GB , M , SX_Effect_String[ FX^.S ] , I18N_MsgString( 'StatusEffectCheck' , 'Status_FXDesc' + BStr( FX^.S ) ) );
 					end;
 
 					if ( FX^.V > 0 ) and ( SX_ResistTarget[ FX^.S ] = -1 ) then begin
