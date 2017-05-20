@@ -1319,9 +1319,9 @@ begin
 
 
 	for n := 1 to 4 do begin
-		AI_PrintFromRight( StatName[n] + ':' , 8 , InfoGreen );
+		AI_PrintFromRight( I18N_Name('StatName',StatName[n]) + ':' , 8 , InfoGreen );
 		AI_PrintFromLeft( BStr( CStat( Part, n ) ) , CZone.W div 2 - 8 , InfoGreen );
-		AI_PrintFromRight( StatName[n+4] + ':' , CZone.W div 2 + 8 , InfoGreen );
+		AI_PrintFromRight( I18N_Name('StatName',StatName[n+4]) + ':' , CZone.W div 2 + 8 , InfoGreen );
 		AI_PrintFromLeft( BStr( CStat( Part, n+4 ) ) , CZone.W - 8 , InfoGreen );
 		AI_NextLine;
 	end;
@@ -1410,7 +1410,7 @@ Procedure PilotInfoForSelectingAMecha( PC: GearPtr; GB: GameBoardPtr; Z: Dynamic
         { If this skill is known by the PC, print it. }
     begin
         if NAttValue( PC^.NA , NAG_Skill, sk ) > 0 then begin
-        	AI_PrintFromRight( SkillMan[sk].name + ': ' + SgnStr(NAttValue( PC^.NA , NAG_Skill, sk )) , 116, InfoGreen );
+        	AI_PrintFromRight( I18N_Name('SkillMan',SkillMan[sk].name) + ': ' + SgnStr(NAttValue( PC^.NA , NAG_Skill, sk )) , 116, InfoGreen );
         	AI_NextLine;
         end;
     end;
