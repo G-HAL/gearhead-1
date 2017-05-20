@@ -863,6 +863,7 @@ var
 	SList,SA: SAttPtr;
 	S_Total,S_Temp: PSDL_Surface;
 	MyDest: SDL_Rect;
+	rmask, gmask, bmask, amask: UInt32;
 	NextWord: String;
 	THELine: String;	{The line under construction.}
 begin
@@ -890,8 +891,17 @@ begin
 	{ Create a bitmap for the message. }
 	if SList <> Nil then begin
 		{ Create a big bitmap to hold everything. }
-{		S_Total := SDL_CreateRGBSurface( SDL_SWSURFACE , width , TTF_FontLineSkip( MyFont ) * NumSAtts( SList ) , 16 , 0 , 0 , 0 , 0 );
-}		S_Total := SDL_CreateRGBSurface( SDL_SWSURFACE , width , TTF_FontLineSkip( MyFont ) * NumSAtts( SList ) , 32 , $FF000000 , $00FF0000 , $0000FF00 , $000000FF );
+		rmask := $00FF0000;
+		gmask := $0000FF00;
+		bmask := $000000FF;
+		amask := $FF000000;
+		if not(SDL_AAFont) and not(SDL_AAFont_Shaded) then begin
+			S_Total := SDL_CreateRGBSurface( SDL_SWSURFACE , width , TTF_FontLineSkip( MyFont ) * NumSAtts( SList ) , 32 , rmask, gmask, bmask, amask );
+		end else if SDL_AAFont_Shaded then begin
+			S_Total := SDL_CreateRGBSurface( SDL_SWSURFACE , width , TTF_FontLineSkip( MyFont ) * NumSAtts( SList ) , 32 , rmask, gmask, bmask, amask );
+		end else begin
+			S_Total := SDL_CreateRGBSurface( ( SDL_SRCALPHA or SDL_SWSURFACE ) , width , TTF_FontLineSkip( MyFont ) * NumSAtts( SList ) , 32 , rmask, gmask, bmask, amask );
+		end;
 		MyDest.X := 0;
 		MyDest.Y := 0;
 
@@ -899,6 +909,11 @@ begin
 		SA := SList;
 		while SA <> Nil do begin
 			S_Temp := I18N_TTF_RenderText( MyFont , SA^.Info , fg );
+			if not(SDL_AAFont) and not(SDL_AAFont_Shaded) then begin
+			end else if SDL_AAFont_Shaded then begin
+			end else begin
+				SDL_SetAlpha( S_Temp , 0 , SDL_ALPHA_OPAQUE );
+			end;
 
 			{ We may or may not be required to do centering of the text. }
 			if DoCenter then begin
