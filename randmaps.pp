@@ -353,8 +353,10 @@ begin
 			Name := Name_I18N;
 		end;
 		if Name <> '' then begin
-			SetSAtt( NewDoor^.SA , 'NAME <' + ReplaceHash( I18N_MsgString('RANDMAPS_DoorSign'), Name ) + '>' );
-			SetSAtt( NewDoor^.SA , 'NAME_I18N <' + ReplaceHash( I18N_MsgString('RANDMAPS_DoorSign_I18N'), Name_I18N ) + '>' );
+			SetSAtt( NewDoor^.SA , 'NAME <' + ReplaceHash( I18N_MsgString('RANDMAPS','DoorSign'), Name ) + '>' );
+			if ( 0 < Length(Name_I18N) ) then begin
+				SetSAtt( NewDoor^.SA , 'NAME_I18N <' + ReplaceHash( I18N_MsgString('RANDMAPS','DoorSign_I18N'), Name_I18N ) + '>' );
+			end;
 		end;
 
 		{ Possibly make the door either LOCKED or SECRET, }
