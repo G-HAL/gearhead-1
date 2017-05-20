@@ -38,6 +38,7 @@ Mod Body
 		end
 
 		ECM 3
+		Name_I18N <>
 	end
 	inv
 		BodyArmor 3
@@ -89,6 +90,7 @@ Mod Leg
 	end
 	inv
 		LegArmor 2
+		Name_I18N <>
 	end
 
 Mod Leg
@@ -101,5 +103,6 @@ Mod Leg
 	end
 	inv
 		LegArmor 2
+		Name_I18N <>
 	end
 end
