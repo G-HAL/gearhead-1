@@ -538,7 +538,7 @@ Procedure SelectJob( PC: GearPtr; var Cash: LongInt );
         Cash: LongInt;
 	begin
     	FX := RetrieveAString( Job );
-	    msg := RetrieveAPreamble( Job ) + ': ';
+	    msg := I18N_Name('Jobs',RetrieveAPreamble( Job )) + ': ';
         Cash := JobCashBonus( FX );
 
 		{ Add the skills. }
@@ -548,7 +548,7 @@ Procedure SelectJob( PC: GearPtr; var Cash: LongInt );
 
     		if ( Skill > 0 ) and ( Skill <= NumSkill ) then begin
 				if N > 0 then msg := msg + ', ';
-				msg := msg + SkillMan[ Skill ].name + '+1';
+				msg := msg + I18N_Name('SkillMan',SkillMan[ Skill ].name) + '+1';
 				inc( N );
 			end;
 		end;
