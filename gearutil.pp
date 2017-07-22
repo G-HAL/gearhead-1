@@ -420,15 +420,18 @@ begin
 	{for nothing.}
 	if Part = Nil then Exit( '' );
 
-	if I18N_UseNameORG then begin
-		it := SAttValue(Part^.SA,'NAME');
-		if '' = it then begin
-			it := SAttValue(Part^.SA,'NAME_I18N');
-		end;
-	end else begin
-		it := SAttValue(Part^.SA,'NAME_I18N');
-		if '' = it then begin
+	it := SAttValue(Part^.SA,'NAME_RENAME');
+	if '' = it then begin
+		if I18N_UseNameORG then begin
 			it := SAttValue(Part^.SA,'NAME');
+			if '' = it then begin
+				it := SAttValue(Part^.SA,'NAME_I18N');
+			end;
+		end else begin
+			it := SAttValue(Part^.SA,'NAME_I18N');
+			if '' = it then begin
+				it := SAttValue(Part^.SA,'NAME');
+			end;
 		end;
 	end;
 

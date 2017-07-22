@@ -1973,7 +1973,7 @@ begin
 	name := GetStringFromUser( ReplaceHash( MsgString( 'FHQ_Rename_Prompt' ) , GearName( NPC ) ) );
 	GFCombatDisplay( GB );
 {$ENDIF}
-	if name <> '' then SetSAtt( NPC^.SA , 'name <' + name + '>' );
+	SetSAtt( NPC^.SA , 'name_rename <' + name + '>' );
 end;
 
 Procedure FHQ_ThisWargearWasSelected( GB: GameBoardPtr; var LList: GearPtr; PC,M: GearPtr );
